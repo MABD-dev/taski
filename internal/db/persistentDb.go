@@ -15,6 +15,7 @@ func NewPersistentDb() *PersistentDb {
 	inMemoryDb := &InMemoryDb{
 		Tasks: &tasks,
 	}
+	storage.Load(inMemoryDb.Tasks)
 
 	return &PersistentDb{
 		InMemoryDb: *inMemoryDb,
@@ -23,7 +24,6 @@ func NewPersistentDb() *PersistentDb {
 }
 
 func (db *PersistentDb) List() {
-	db.storage.Load(db.InMemoryDb.Tasks)
 	db.InMemoryDb.List()
 }
 
