@@ -56,7 +56,7 @@ func (db *Db) Delete(number int) error {
 		return fmt.Errorf("Could not find task with specified number=%v", number)
 	}
 
-	slices.Delete(*db.Tasks, taskIndex, taskIndex+1)
+	*db.Tasks = slices.Delete(*db.Tasks, taskIndex, taskIndex+1)
 	return nil
 }
 
