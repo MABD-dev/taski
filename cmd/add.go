@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/mabd-dev/tasks/internal/db"
 	"github.com/spf13/cobra"
 )
 
@@ -18,6 +19,10 @@ var AddCmd = &cobra.Command{
 		if len(args) > 1 {
 			description = args[1]
 		}
-		fmt.Printf("action: Adding new task ..., name=%v, description=%v", name, description)
+		fmt.Printf("action: Adding new task ..., name=%v, description=%v\n\n", name, description)
+
+		db := db.GetDb()
+		db.Add(name, description)
+		// db.List()
 	},
 }

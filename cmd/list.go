@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/mabd-dev/tasks/internal/db"
 	"github.com/spf13/cobra"
 )
 
@@ -13,5 +14,8 @@ var ListCmd = &cobra.Command{
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("listing tasks...")
+
+		db := db.GetDb()
+		db.List()
 	},
 }
