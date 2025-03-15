@@ -31,9 +31,9 @@ func (db *InMemoryDb) List() {
 func (db *InMemoryDb) Add(name string, description string) {
 	// WARN: do input validation on name and description
 
-	nOfTasks := len(*db.Tasks)
+	newTaskNumber := db.findMaxTaskNumber() + 1
 	newTask := models.Task{
-		Number:      nOfTasks + 1,
+		Number:      newTaskNumber,
 		Name:        name,
 		Description: description,
 		CreatedAt:   time.Now(),
@@ -61,4 +61,16 @@ func (db *InMemoryDb) getTaskIndexFromNumber(number int) int {
 		}
 	}
 	return -1
+}
+
+func (db *InMemoryDb) findMaxTaskNumber() int {
+	maxNumber := 1
+
+	t := *db.Tasks
+	for i := range t {
+		if t[i].Number > maxNumber {
+			maxNumber = t[i].Number
+		}
+	}
+	return maxNumber
 }
