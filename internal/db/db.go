@@ -12,10 +12,6 @@ var (
 
 func GetDb() Db {
 	if dbInstance == nil {
-		// tasks := make([]models.Task, 0)
-		// dbInstance = &InMemoryDb{
-		// 	Tasks: &tasks,
-		// }
 		dbInstance = NewPersistentDb()
 	}
 	return dbInstance
