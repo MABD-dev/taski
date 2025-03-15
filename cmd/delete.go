@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/mabd-dev/tasks/internal/db"
@@ -19,7 +18,6 @@ var DeleteCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Deleting a task with number=%v\n", taskNumber)
 
 		db := db.GetDb()
 		err = db.Delete(taskNumber)
