@@ -1,6 +1,6 @@
 package db
 
-import "github.com/mabd-dev/tasks/internal/models"
+import "github.com/mabd-dev/taski/internal/models"
 
 type Db interface {
 	List() []models.Task

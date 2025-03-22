@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/aquasecurity/table"
-	"github.com/mabd-dev/tasks/internal/models"
+	"github.com/mabd-dev/taski/internal/models"
 )
 
 func RenderTable(tasks []models.Task) {

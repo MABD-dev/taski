@@ -1,8 +1,8 @@
 package db
 
 import (
-	"github.com/mabd-dev/tasks/internal/models"
-	"github.com/mabd-dev/tasks/internal/services"
+	"github.com/mabd-dev/taski/internal/models"
+	"github.com/mabd-dev/taski/internal/services"
 )
 
 type PersistentDb struct {

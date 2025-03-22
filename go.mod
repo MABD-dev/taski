@@ -1,4 +1,4 @@
-module github.com/mabd-dev/tasks
+module github.com/mabd-dev/taski
 
 go 1.24.1
 

@@ -3,8 +3,8 @@ package cmd
 import (
 	"strconv"
 
-	"github.com/mabd-dev/tasks/internal/db"
-	"github.com/mabd-dev/tasks/internal/renderer"
+	"github.com/mabd-dev/taski/internal/db"
+	"github.com/mabd-dev/taski/internal/renderer"
 	"github.com/spf13/cobra"
 )
 
