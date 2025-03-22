@@ -39,14 +39,24 @@ func (db *PersistentDb) Get(taskNumber int) *models.Task {
 
 func (db *PersistentDb) Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error {
 	err := db.InMemoryDb.Update(taskNumber, name, description, status)
-	if err == nil {
-		db.save()
+	if err != nil {
+		return err
 	}
-	return err
+	db.save()
+	return nil
 }
 
 func (db *PersistentDb) Delete(number int) error {
 	err := db.InMemoryDb.Delete(number)
+	if err != nil {
+		return err
+	}
+	db.save()
+	return nil
+}
+
+func (db *PersistentDb) DeleteAll(taskNumbers []int) error {
+	err := db.InMemoryDb.DeleteAll(taskNumbers)
 	if err != nil {
 		return err
 	}

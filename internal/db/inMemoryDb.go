@@ -77,6 +77,19 @@ func (db *InMemoryDb) Delete(number int) error {
 	return nil
 }
 
+func (db *InMemoryDb) DeleteAll(taskNumbers []int) error {
+	for _, taskNumber := range taskNumbers {
+		taskIndex := db.getTaskIndexFromNumber(taskNumber)
+		if taskIndex == -1 {
+			return fmt.Errorf("Could not find task with specified number=%v", taskNumber)
+		}
+
+		*db.Tasks = slices.Delete(*db.Tasks, taskIndex, taskIndex+1)
+	}
+
+	return nil
+}
+
 func (db *InMemoryDb) getTaskIndexFromNumber(number int) int {
 	t := *db.Tasks
 	for i := range *db.Tasks {

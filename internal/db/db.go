@@ -8,6 +8,7 @@ type Db interface {
 	Get(taskNumber int) *models.Task
 	Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error
 	Delete(number int) error
+	DeleteAll(taskNumbers []int) error
 }
 
 var (
