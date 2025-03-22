@@ -73,3 +73,6 @@ Features coming up
 - [ ] Priorities Support
 - [ ] Task due date support
 - [ ] Project/Context for each task
+
+
+Started from this project: https://roadmap.sh/projects/task-tracker
