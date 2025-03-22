@@ -28,6 +28,8 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.PersistentFlags().StringArrayP("status", "s", []string{}, "Filter tasks by status. Not case sensitive")
+
 	rootCmd.AddCommand(ListCmd)
 	ListCmd.PersistentFlags().StringArrayP("status", "s", []string{}, "Filter tasks by status. Not case sensitive")
 
