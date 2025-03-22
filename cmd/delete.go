@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/mabd-dev/tasks/internal/db"
+	"github.com/mabd-dev/tasks/internal/renderer"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +26,7 @@ var DeleteCmd = &cobra.Command{
 			return err
 		}
 
-		// db.List()
+		renderer.RenderTable(db.List())
 		return nil
 	},
 }

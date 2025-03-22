@@ -1,12 +1,8 @@
 package cmd
 
 import (
-	"os"
-	"strconv"
-	"time"
-
-	"github.com/aquasecurity/table"
 	"github.com/mabd-dev/tasks/internal/db"
+	"github.com/mabd-dev/tasks/internal/renderer"
 	"github.com/spf13/cobra"
 )
 
@@ -32,12 +28,6 @@ var ListCmd = &cobra.Command{
 			tasks = filterByStatus(tasks, statuses)
 		}
 
-		table := table.New(os.Stdout)
-		table.SetHeaders("#", "Name", "Description", "Status", "Created At")
-
-		for _, task := range tasks {
-			table.AddRow(strconv.Itoa(task.Number), task.Name, task.Description, task.Status.ToString(), task.CreatedAt.Format(time.RFC1123))
-		}
-		table.Render()
+		renderer.RenderTable(tasks)
 	},
 }

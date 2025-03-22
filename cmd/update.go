@@ -5,6 +5,7 @@ import (
 
 	"github.com/mabd-dev/tasks/internal/db"
 	"github.com/mabd-dev/tasks/internal/models"
+	"github.com/mabd-dev/tasks/internal/renderer"
 	"github.com/spf13/cobra"
 )
 
@@ -57,5 +58,6 @@ var UpdateCmd = &cobra.Command{
 			panic("could not find task")
 		}
 
+		renderer.RenderTable(db.List())
 	},
 }

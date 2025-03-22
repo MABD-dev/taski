@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/mabd-dev/tasks/internal/db"
 	"github.com/mabd-dev/tasks/internal/models"
+	"github.com/mabd-dev/tasks/internal/renderer"
 	"github.com/spf13/cobra"
 )
 
@@ -31,8 +32,6 @@ var AddCmd = &cobra.Command{
 		db := db.GetDb()
 		db.Add(name, description, status)
 
-		// TODO: create a function somewhre to display list of tasks on terminal
-		//   use that function in list command
-		// db.List()
+		renderer.RenderTable(db.List())
 	},
 }
