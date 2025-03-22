@@ -19,7 +19,7 @@ func (status TaskStatus) ToString() string {
 	case Todo:
 		return "todo"
 	case InProgress:
-		return "inProgress"
+		return "in progress"
 	case Done:
 		return "done"
 	default:
