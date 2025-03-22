@@ -1,7 +1,9 @@
 package db
 
+import "github.com/mabd-dev/tasks/internal/models"
+
 type Db interface {
-	List()
+	List() []models.Task
 	Add(name string, description string)
 	Delete(number int) error
 }

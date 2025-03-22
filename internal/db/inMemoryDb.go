@@ -2,12 +2,9 @@ package db
 
 import (
 	"fmt"
-	"os"
 	"slices"
-	"strconv"
 	"time"
 
-	"github.com/aquasecurity/table"
 	"github.com/mabd-dev/tasks/internal/models"
 )
 
@@ -15,17 +12,8 @@ type InMemoryDb struct {
 	Tasks *[]models.Task
 }
 
-func (db *InMemoryDb) List() {
-	t := *db.Tasks
-
-	table := table.New(os.Stdout)
-	table.SetHeaders("#", "Name", "Description", "Created At")
-
-	for i := range *db.Tasks {
-		task := t[i]
-		table.AddRow(strconv.Itoa(task.Number), task.Name, task.Description, task.CreatedAt.Format(time.RFC1123))
-	}
-	table.Render()
+func (db *InMemoryDb) List() []models.Task {
+	return *db.Tasks
 }
 
 func (db *InMemoryDb) Add(name string, description string) {

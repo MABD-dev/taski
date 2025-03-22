@@ -23,8 +23,8 @@ func NewPersistentDb() *PersistentDb {
 	}
 }
 
-func (db *PersistentDb) List() {
-	db.InMemoryDb.List()
+func (db *PersistentDb) List() []models.Task {
+	return db.InMemoryDb.List()
 }
 
 func (db *PersistentDb) Add(name string, description string) {
