@@ -11,7 +11,7 @@ type PersistentDb struct {
 }
 
 func NewPersistentDb() *PersistentDb {
-	storage := services.NewLocalStorage[[]models.Task]("data/tasks.json")
+	storage := services.NewLocalStorage[[]models.Task]("tasks.json")
 	tasks := make([]models.Task, 0)
 	inMemoryDb := &InMemoryDb{
 		Tasks: &tasks,
