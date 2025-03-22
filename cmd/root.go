@@ -32,7 +32,8 @@ func init() {
 	ListCmd.PersistentFlags().StringArrayP("status", "s", []string{}, "Filter tasks by status. Not case sensitive")
 
 	rootCmd.AddCommand(AddCmd)
-	AddCmd.PersistentFlags().StringP("status", "s", "todo", "Add status to task")
+	AddCmd.PersistentFlags().StringP("status", "s", "todo", "Add status to task. options[\"todo\", \"inprogress\", \"done\"]")
+	AddCmd.PersistentFlags().StringP("description", "d", "", "Add description to task")
 
 	rootCmd.AddCommand(DeleteCmd)
 }

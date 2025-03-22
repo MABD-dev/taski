@@ -10,7 +10,7 @@ var AddCmd = &cobra.Command{
 	Use:   "add [task name] [task description]",
 	Short: "Add new task",
 	Long:  "Add new task to the list with default completion value to false",
-	Args:  cobra.MinimumNArgs(1),
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		statusStr, err := cmd.Flags().GetString("status")
 		if err != nil {
@@ -21,12 +21,12 @@ var AddCmd = &cobra.Command{
 			panic(err)
 		}
 
-		name := args[0]
-
-		description := ""
-		if len(args) > 1 {
-			description = args[1]
+		description, err := cmd.Flags().GetString("description")
+		if err != nil {
+			panic(err)
 		}
+
+		name := args[0]
 
 		db := db.GetDb()
 		db.Add(name, description, status)
