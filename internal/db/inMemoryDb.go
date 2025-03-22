@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 	"slices"
 	"time"
@@ -17,7 +18,7 @@ func (db *InMemoryDb) List() []models.Task {
 }
 
 func (db *InMemoryDb) Add(name string, description string, status models.TaskStatus) {
-	// WARN: do input validation on name and description
+	// WARN: do input validation
 
 	newTaskNumber := db.findMaxTaskNumber() + 1
 	newTask := models.Task{
@@ -30,6 +31,40 @@ func (db *InMemoryDb) Add(name string, description string, status models.TaskSta
 	}
 
 	*db.Tasks = append(*db.Tasks, newTask)
+}
+
+func (db *InMemoryDb) Get(taskNumber int) *models.Task {
+	for _, t := range *db.Tasks {
+		if t.Number == taskNumber {
+			return &t
+		}
+	}
+	return nil
+}
+
+func (db *InMemoryDb) Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error {
+	// WARN: do input validation
+
+	taskIndex := db.getTaskIndexFromNumber(taskNumber)
+	if taskIndex == -1 {
+		return errors.New("Could not find task")
+	}
+
+	tasks := *db.Tasks
+	task := tasks[taskIndex]
+
+	if name != nil {
+		task.Name = *name
+	}
+	if description != nil {
+		task.Description = *description
+	}
+	if status != nil {
+		task.Status = *status
+	}
+	tasks[taskIndex] = task
+
+	return nil
 }
 
 func (db *InMemoryDb) Delete(number int) error {

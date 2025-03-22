@@ -37,5 +37,10 @@ func init() {
 	AddCmd.PersistentFlags().StringP("status", "s", "todo", "Add status to task. options[\"todo\", \"inprogress\", \"done\"]")
 	AddCmd.PersistentFlags().StringP("description", "d", "", "Add description to task")
 
+	rootCmd.AddCommand(UpdateCmd)
+	UpdateCmd.PersistentFlags().StringP("name", "n", "", "Update name of the task")
+	UpdateCmd.PersistentFlags().StringP("description", "d", "", "Add description to task")
+	UpdateCmd.PersistentFlags().StringP("status", "s", "", "Update status of the task. Old values will be removed!")
+
 	rootCmd.AddCommand(DeleteCmd)
 }

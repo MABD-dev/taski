@@ -2,13 +2,11 @@ package cmd
 
 import (
 	"os"
-	"slices"
 	"strconv"
 	"time"
 
 	"github.com/aquasecurity/table"
 	"github.com/mabd-dev/tasks/internal/db"
-	"github.com/mabd-dev/tasks/internal/models"
 	"github.com/spf13/cobra"
 )
 
@@ -42,27 +40,4 @@ var ListCmd = &cobra.Command{
 		}
 		table.Render()
 	},
-}
-
-func stringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
-	statuses := []models.TaskStatus{}
-	for _, statusStr := range strs {
-		status, err := models.TaskStatusStrToStatus(statusStr)
-		if err != nil {
-			return statuses, err
-		}
-		statuses = append(statuses, status)
-	}
-	return statuses, nil
-}
-
-func filterByStatus(tasks []models.Task, statuses []models.TaskStatus) []models.Task {
-	filteredTasks := []models.Task{}
-
-	for _, task := range tasks {
-		if slices.Contains(statuses, task.Status) {
-			filteredTasks = append(filteredTasks, task)
-		}
-	}
-	return filteredTasks
 }

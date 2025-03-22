@@ -29,7 +29,19 @@ func (db *PersistentDb) List() []models.Task {
 
 func (db *PersistentDb) Add(name string, description string, status models.TaskStatus) {
 	db.InMemoryDb.Add(name, description, status)
-	db.storage.Save(*db.InMemoryDb.Tasks)
+	db.save()
+}
+
+func (db *PersistentDb) Get(taskNumber int) *models.Task {
+	return db.InMemoryDb.Get(taskNumber)
+}
+
+func (db *PersistentDb) Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error {
+	err := db.InMemoryDb.Update(taskNumber, name, description, status)
+	if err == nil {
+		db.save()
+	}
+	return err
 }
 
 func (db *PersistentDb) Delete(number int) error {
@@ -37,6 +49,10 @@ func (db *PersistentDb) Delete(number int) error {
 	if err != nil {
 		return err
 	}
-	db.storage.Save(*db.InMemoryDb.Tasks)
+	db.save()
 	return nil
+}
+
+func (db *PersistentDb) save() {
+	db.storage.Save(*db.InMemoryDb.Tasks)
 }
