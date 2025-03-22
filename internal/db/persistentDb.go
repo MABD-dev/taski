@@ -28,9 +28,13 @@ func (db *PersistentDb) List() []models.Task {
 	return db.InMemoryDb.List()
 }
 
-func (db *PersistentDb) Add(name string, description string, status models.TaskStatus) {
-	db.InMemoryDb.Add(name, description, status)
+func (db *PersistentDb) Add(name string, description string, status models.TaskStatus) error {
+	err := db.InMemoryDb.Add(name, description, status)
+	if err != nil {
+		return err
+	}
 	db.save()
+	return nil
 }
 
 func (db *PersistentDb) Get(taskNumber int) *models.Task {

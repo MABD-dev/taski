@@ -11,7 +11,7 @@ var ListCmd = &cobra.Command{
 	Short: "List all tasks",
 	Long:  "List all your tasks",
 	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		statuses, err := cmd.Flags().GetStringArray("status")
 		if err != nil {
 			panic(err)
@@ -29,5 +29,6 @@ var ListCmd = &cobra.Command{
 		}
 
 		renderer.RenderTable(tasks)
+		return nil
 	},
 }

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/mabd-dev/tasks/internal/models"
+	"github.com/mabd-dev/tasks/validator"
 )
 
 type InMemoryDb struct {
@@ -17,8 +18,13 @@ func (db *InMemoryDb) List() []models.Task {
 	return *db.Tasks
 }
 
-func (db *InMemoryDb) Add(name string, description string, status models.TaskStatus) {
-	// WARN: do input validation
+func (db *InMemoryDb) Add(name string, description string, status models.TaskStatus) error {
+	if err := validator.TaskName(name); err != nil {
+		return err
+	}
+	if err := validator.TaskDescription(description); err != nil {
+		return err
+	}
 
 	newTaskNumber := db.findMaxTaskNumber() + 1
 	newTask := models.Task{
@@ -31,6 +37,7 @@ func (db *InMemoryDb) Add(name string, description string, status models.TaskSta
 	}
 
 	*db.Tasks = append(*db.Tasks, newTask)
+	return nil
 }
 
 func (db *InMemoryDb) Get(taskNumber int) *models.Task {
@@ -43,8 +50,6 @@ func (db *InMemoryDb) Get(taskNumber int) *models.Task {
 }
 
 func (db *InMemoryDb) Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error {
-	// WARN: do input validation
-
 	taskIndex := db.getTaskIndexFromNumber(taskNumber)
 	if taskIndex == -1 {
 		return errors.New("Could not find task")
@@ -54,9 +59,15 @@ func (db *InMemoryDb) Update(taskNumber int, name *string, description *string, 
 	task := tasks[taskIndex]
 
 	if name != nil {
+		if err := validator.TaskName(*name); err != nil {
+			return err
+		}
 		task.Name = *name
 	}
 	if description != nil {
+		if err := validator.TaskDescription(*description); err != nil {
+			return err
+		}
 		task.Description = *description
 	}
 	if status != nil {

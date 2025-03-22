@@ -14,7 +14,7 @@ var UpdateCmd = &cobra.Command{
 	Short: "Update task name or description",
 	Long:  "Update a task name or description by providing it's number",
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		// flags, name, description, status
 		taskNumber, err := strconv.Atoi(args[0])
 		if err != nil {
@@ -55,9 +55,10 @@ var UpdateCmd = &cobra.Command{
 		db := db.GetDb()
 		err = db.Update(taskNumber, name, description, status)
 		if err != nil {
-			panic("could not find task")
+			return err
 		}
 
 		renderer.RenderTable(db.List())
+		return nil
 	},
 }

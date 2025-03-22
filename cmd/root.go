@@ -9,12 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "tasks",
 	Short: "Manage your daily tasks from your terminal",
-	Run: func(cmd *cobra.Command, args []string) {
-		ListCmd.Run(cmd, args)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return ListCmd.RunE(cmd, args)
 	},
 }
 
