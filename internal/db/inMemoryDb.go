@@ -16,7 +16,7 @@ func (db *InMemoryDb) List() []models.Task {
 	return *db.Tasks
 }
 
-func (db *InMemoryDb) Add(name string, description string) {
+func (db *InMemoryDb) Add(name string, description string, status models.TaskStatus) {
 	// WARN: do input validation on name and description
 
 	newTaskNumber := db.findMaxTaskNumber() + 1
@@ -24,6 +24,7 @@ func (db *InMemoryDb) Add(name string, description string) {
 		Number:      newTaskNumber,
 		Name:        name,
 		Description: description,
+		Status:      status,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   nil,
 	}

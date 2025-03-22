@@ -25,7 +25,7 @@ var DeleteCmd = &cobra.Command{
 			return err
 		}
 
-		db.List()
+		// db.List()
 		return nil
 	},
 }

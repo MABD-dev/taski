@@ -1,11 +1,9 @@
 package cmd
 
 import (
-	"errors"
 	"os"
 	"slices"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/aquasecurity/table"
@@ -49,30 +47,13 @@ var ListCmd = &cobra.Command{
 func stringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
 	statuses := []models.TaskStatus{}
 	for _, statusStr := range strs {
-		status, err := nameToTaskStatus(statusStr)
+		status, err := models.TaskStatusStrToStatus(statusStr)
 		if err != nil {
 			return statuses, err
 		}
 		statuses = append(statuses, status)
 	}
 	return statuses, nil
-}
-
-func nameToTaskStatus(s string) (models.TaskStatus, error) {
-	name := strings.ToLower(s)
-
-	if name == "todo" {
-		return models.Todo, nil
-	}
-	if name == "inprogress" {
-		return models.InProgress, nil
-	}
-	if name == "done" {
-		return models.Done, nil
-	}
-
-	err := errors.New("Could not covert from string to TaskStatus")
-	return models.Todo, err
 }
 
 func filterByStatus(tasks []models.Task, statuses []models.TaskStatus) []models.Task {

@@ -27,8 +27,8 @@ func (db *PersistentDb) List() []models.Task {
 	return db.InMemoryDb.List()
 }
 
-func (db *PersistentDb) Add(name string, description string) {
-	db.InMemoryDb.Add(name, description)
+func (db *PersistentDb) Add(name string, description string, status models.TaskStatus) {
+	db.InMemoryDb.Add(name, description, status)
 	db.storage.Save(*db.InMemoryDb.Tasks)
 }
 

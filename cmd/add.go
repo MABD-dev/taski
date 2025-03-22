@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/mabd-dev/tasks/internal/db"
+	"github.com/mabd-dev/tasks/internal/models"
 	"github.com/spf13/cobra"
 )
 
@@ -11,6 +12,15 @@ var AddCmd = &cobra.Command{
 	Long:  "Add new task to the list with default completion value to false",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		statusStr, err := cmd.Flags().GetString("status")
+		if err != nil {
+			panic(err)
+		}
+		status, err := models.TaskStatusStrToStatus(statusStr)
+		if err != nil {
+			panic(err)
+		}
+
 		name := args[0]
 
 		description := ""
@@ -19,7 +29,10 @@ var AddCmd = &cobra.Command{
 		}
 
 		db := db.GetDb()
-		db.Add(name, description)
-		db.List()
+		db.Add(name, description, status)
+
+		// TODO: create a function somewhre to display list of tasks on terminal
+		//   use that function in list command
+		// db.List()
 	},
 }
