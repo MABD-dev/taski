@@ -47,7 +47,7 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 2. **Add Task**
     ```sh
     taski add "update taski readme file" # this will create new task with name "update taski reamde file"
-    task add "task name" -d "this is task description" # add task description message
+    taski add "task name" -d "this is task description" # add task description message
     taski add "task name" -s inprogress # set task status 
     ```
 
