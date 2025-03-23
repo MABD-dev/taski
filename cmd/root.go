@@ -6,6 +6,7 @@ package cmd
 import (
 	"os"
 
+	"github.com/mabd-dev/taski/repl"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +14,8 @@ var rootCmd = &cobra.Command{
 	Use:   "tasks",
 	Short: "Manage your daily tasks from your terminal",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return ListCmd.RunE(cmd, args)
+		repl.StartRepl()
+		return nil
 	},
 }
 
