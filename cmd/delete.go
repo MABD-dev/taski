@@ -3,8 +3,8 @@ package cmd
 import (
 	"strconv"
 
-	"github.com/mabd-dev/taski/internal/db"
-	"github.com/mabd-dev/taski/internal/renderer"
+	"github.com/mabd-dev/taski/internal/domain/repos"
+	"github.com/mabd-dev/taski/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -27,13 +27,12 @@ $ ./tasks delete 1 2 3 4 5
 			taskNumbers = append(taskNumbers, taskNumber)
 		}
 
-		db := db.GetDb()
-		err := db.DeleteAll(taskNumbers)
+		err := repos.TasksRepo.DeleteAll(taskNumbers)
 		if err != nil {
 			return err
 		}
 
-		renderer.RenderTable(db.List())
+		ui.RenderTable(repos.TasksRepo.List())
 		return nil
 	},
 }

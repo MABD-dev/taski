@@ -6,8 +6,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/mabd-dev/taski/internal/models"
-	"github.com/mabd-dev/taski/validator"
+	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
 type InMemoryDb struct {
@@ -18,14 +17,8 @@ func (db *InMemoryDb) List() []models.Task {
 	return *db.Tasks
 }
 
+// Assuming data is already valid
 func (db *InMemoryDb) Add(name string, description string, status models.TaskStatus) error {
-	if err := validator.TaskName(name); err != nil {
-		return err
-	}
-	if err := validator.TaskDescription(description); err != nil {
-		return err
-	}
-
 	newTaskNumber := db.findMaxTaskNumber() + 1
 	newTask := models.Task{
 		Number:      newTaskNumber,
@@ -49,6 +42,7 @@ func (db *InMemoryDb) Get(taskNumber int) *models.Task {
 	return nil
 }
 
+// Assuming data is already valid
 func (db *InMemoryDb) Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error {
 	taskIndex := db.getTaskIndexFromNumber(taskNumber)
 	if taskIndex == -1 {
@@ -59,15 +53,9 @@ func (db *InMemoryDb) Update(taskNumber int, name *string, description *string, 
 	task := tasks[taskIndex]
 
 	if name != nil {
-		if err := validator.TaskName(*name); err != nil {
-			return err
-		}
 		task.Name = *name
 	}
 	if description != nil {
-		if err := validator.TaskDescription(*description); err != nil {
-			return err
-		}
 		task.Description = *description
 	}
 	if status != nil {

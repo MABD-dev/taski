@@ -1,12 +1,12 @@
-package cmd
+package converter
 
 import (
 	"slices"
 
-	"github.com/mabd-dev/taski/internal/models"
+	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
-func stringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
+func StringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
 	statuses := []models.TaskStatus{}
 	for _, statusStr := range strs {
 		status, err := models.TaskStatusStrToStatus(statusStr)
@@ -18,7 +18,7 @@ func stringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
 	return statuses, nil
 }
 
-func filterByStatus(tasks []models.Task, statuses []models.TaskStatus) []models.Task {
+func FilterByStatus(tasks []models.Task, statuses []models.TaskStatus) []models.Task {
 	filteredTasks := []models.Task{}
 
 	for _, task := range tasks {

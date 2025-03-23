@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"github.com/mabd-dev/taski/internal/db"
-	"github.com/mabd-dev/taski/internal/models"
-	"github.com/mabd-dev/taski/internal/renderer"
+	"github.com/mabd-dev/taski/internal/domain/models"
+	"github.com/mabd-dev/taski/internal/domain/repos"
+	"github.com/mabd-dev/taski/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -29,13 +29,12 @@ var AddCmd = &cobra.Command{
 
 		name := args[0]
 
-		db := db.GetDb()
-		err = db.Add(name, description, status)
+		err = repos.TasksRepo.Add(name, description, status)
 		if err != nil {
 			return err
 		}
 
-		renderer.RenderTable(db.List())
+		ui.RenderTable(repos.TasksRepo.List())
 		return nil
 	},
 }

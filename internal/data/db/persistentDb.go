@@ -1,17 +1,17 @@
 package db
 
 import (
-	"github.com/mabd-dev/taski/internal/models"
-	"github.com/mabd-dev/taski/internal/services"
+	"github.com/mabd-dev/taski/internal/data"
+	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
 type PersistentDb struct {
 	InMemoryDb
-	storage services.LocalStorage[[]models.Task]
+	storage data.LocalStorage[[]models.Task]
 }
 
 func NewPersistentDb() *PersistentDb {
-	storage := services.NewLocalStorage[[]models.Task]("tasks.json")
+	storage := data.NewLocalStorage[[]models.Task]("tasks.json")
 	tasks := make([]models.Task, 0)
 	inMemoryDb := &InMemoryDb{
 		Tasks: &tasks,
