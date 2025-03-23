@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/mabd-dev/taski/internal/domain/repos"
-	"github.com/mabd-dev/taski/internal/presentation"
+	"github.com/mabd-dev/taski/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -32,7 +32,7 @@ $ ./tasks delete 1 2 3 4 5
 			return err
 		}
 
-		presentation.RenderTable(repos.TasksRepo.List())
+		ui.RenderTable(repos.TasksRepo.List())
 		return nil
 	},
 }

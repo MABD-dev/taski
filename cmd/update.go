@@ -5,7 +5,7 @@ import (
 
 	"github.com/mabd-dev/taski/internal/domain/models"
 	"github.com/mabd-dev/taski/internal/domain/repos"
-	"github.com/mabd-dev/taski/internal/presentation"
+	"github.com/mabd-dev/taski/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -57,7 +57,7 @@ var UpdateCmd = &cobra.Command{
 			return err
 		}
 
-		presentation.RenderTable(repos.TasksRepo.List())
+		ui.RenderTable(repos.TasksRepo.List())
 		return nil
 	},
 }

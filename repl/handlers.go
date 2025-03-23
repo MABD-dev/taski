@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"slices"
 	"strings"
 
-	"github.com/mabd-dev/taski/internal/domain/models"
-	"github.com/mabd-dev/taski/internal/presentation"
+	"github.com/mabd-dev/taski/internal/ui"
+	"github.com/mabd-dev/taski/internal/domain/converter"
 )
 
 // TODO: this code is redundent with cmd package, find a way to combine them
@@ -30,11 +29,11 @@ func list(s session, input string) error {
 	listFlags.Parse(parts[1:])
 
 	if len(statusValues) > 0 {
-		statuses, err := stringArrayToTaskStatus(statusValues)
+		statuses, err := converter.StringArrayToTaskStatus(statusValues)
 		if err != nil {
 			return err
 		}
-		tasks = filterByStatus(tasks, statuses)
+		tasks = converter.FilterByStatus(tasks, statuses)
 	}
 
 	if len(tasks) == 0 {
@@ -45,7 +44,7 @@ func list(s session, input string) error {
 		}
 		return nil
 	} else {
-		presentation.RenderTable(tasks)
+		ui.RenderTable(tasks)
 	}
 
 	return nil
@@ -66,7 +65,7 @@ func help(s session, input string) error {
 		alternativeNames := strings.Join(cmd.alternativeNames, ", ")
 		rawData = append(rawData, []string{coloredName, cmd.description, alternativeNames})
 	}
-	presentation.RenderRawData(rawData)
+	ui.RenderRawData(rawData)
 
 	return nil
 }
@@ -82,30 +81,4 @@ func clear(s session, input string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Run()
 	return nil
-}
-
-// TODO: create a domain layer and put these function in it
-// removes duplicate of these in cmd/helpers.js
-
-func stringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
-	statuses := []models.TaskStatus{}
-	for _, statusStr := range strs {
-		status, err := models.TaskStatusStrToStatus(statusStr)
-		if err != nil {
-			return statuses, err
-		}
-		statuses = append(statuses, status)
-	}
-	return statuses, nil
-}
-
-func filterByStatus(tasks []models.Task, statuses []models.TaskStatus) []models.Task {
-	filteredTasks := []models.Task{}
-
-	for _, task := range tasks {
-		if slices.Contains(statuses, task.Status) {
-			filteredTasks = append(filteredTasks, task)
-		}
-	}
-	return filteredTasks
 }
