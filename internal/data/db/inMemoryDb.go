@@ -19,7 +19,13 @@ func (db *InMemoryDb) List() []models.Task {
 
 // Assuming data is already valid
 func (db *InMemoryDb) Add(name string, description string, status models.TaskStatus) error {
-	newTaskNumber := db.findMaxTaskNumber() + 1
+
+	maxTaxNumber := 0
+	for _, task := range *db.Tasks {
+		maxTaxNumber = max(maxTaxNumber, task.Number)
+	}
+	newTaskNumber := maxTaxNumber + 1
+
 	newTask := models.Task{
 		Number:      newTaskNumber,
 		Name:        name,
