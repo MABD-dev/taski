@@ -1,31 +1,43 @@
 package repl
 
-type CommandHandler interface {
-	Run() error
+import "github.com/mabd-dev/taski/internal/db"
+
+type session struct {
+	db db.Db
 }
 
 type command struct {
-	name        string
-	description string
-	handler     func() error
+	name             string
+	alternativeNames []string
+	description      string
+	handler          func(s session, input string) error
 }
 
-func getCommands() map[string]command {
-	return map[string]command{
-		"exit": {
-			name:        "exit",
-			description: "Stops the program",
-			handler:     exit,
+func getSortedCommands() []command {
+	return []command{
+		{
+			name:             "list",
+			alternativeNames: []string{"ls"},
+			description:      "List your tasks",
+			handler:          list,
 		},
-		"help": {
-			name:        "help",
-			description: "Show list of available commands",
-			handler:     help,
+		{
+			name:             "clear",
+			alternativeNames: []string{"cls"},
+			description:      "Clear the terminal",
+			handler:          clear,
 		},
-		"clear": {
-			name:        "clear",
-			description: "clear the terminal",
-			handler:     clear,
+		{
+			name:             "exit",
+			alternativeNames: []string{"kill"},
+			description:      "Stops the program",
+			handler:          exit,
+		},
+		{
+			name:             "help",
+			alternativeNames: []string{"h"},
+			description:      "Show list of available commands",
+			handler:          help,
 		},
 	}
 }

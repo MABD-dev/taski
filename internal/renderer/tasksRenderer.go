@@ -12,11 +12,24 @@ import (
 
 func RenderTable(tasks []models.Task) {
 	table := table.New(os.Stdout)
-	table.SetHeaders("#", "Name", "Description", "Status", "Created At")
+	table.SetHeaders("#", "Name", "Description", "Status", "Creation Date")
 
 	for _, task := range tasks {
 		datetimeFormatted := formatDatetime(task.CreatedAt)
 		table.AddRow(strconv.Itoa(task.Number), task.Name, task.Description, task.Status.ToString(), datetimeFormatted)
+	}
+	table.Render()
+}
+
+func RenderRawData(data [][]string) {
+	table := table.New(os.Stdout)
+
+	for i, row := range data {
+		if i == 0 { // header
+			table.SetHeaders(row...)
+		} else {
+			table.AddRow(row...)
+		}
 	}
 	table.Render()
 }

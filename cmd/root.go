@@ -11,8 +11,8 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "tasks",
-	Short: "Manage your daily tasks from your terminal",
+	Use:   "taski",
+	Short: "Start REPL session",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		repl.StartRepl()
 		return nil
@@ -29,8 +29,6 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringArrayP("status", "s", []string{}, "Filter tasks by status. Not case sensitive")
-
 	rootCmd.AddCommand(ListCmd)
 	ListCmd.PersistentFlags().StringArrayP("status", "s", []string{}, "Filter tasks by status. Not case sensitive")
 
