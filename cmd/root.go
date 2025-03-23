@@ -4,9 +4,9 @@ Copyright © 2025 MABD-dev <mabd.universe@gmail.com>
 package cmd
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/mabd-dev/taski/repl"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +14,8 @@ var rootCmd = &cobra.Command{
 	Use:   "taski",
 	Short: "Start REPL session",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		repl.StartRepl()
+		fmt.Println("Welcome to taski. REPL is coming soon")
+		// repl.StartRepl()
 		return nil
 	},
 }
