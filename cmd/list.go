@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/mabd-dev/taski/internal/db"
-	"github.com/mabd-dev/taski/internal/renderer"
+	"github.com/mabd-dev/taski/internal/data/db"
+	"github.com/mabd-dev/taski/internal/presentation"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +28,7 @@ var ListCmd = &cobra.Command{
 			tasks = filterByStatus(tasks, statuses)
 		}
 
-		renderer.RenderTable(tasks)
+		presentation.RenderTable(tasks)
 		return nil
 	},
 }

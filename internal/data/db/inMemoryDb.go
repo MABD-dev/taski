@@ -6,8 +6,8 @@ import (
 	"slices"
 	"time"
 
-	"github.com/mabd-dev/taski/internal/models"
-	"github.com/mabd-dev/taski/validator"
+	"github.com/mabd-dev/taski/internal/domain/models"
+	"github.com/mabd-dev/taski/internal/domain/validator"
 )
 
 type InMemoryDb struct {

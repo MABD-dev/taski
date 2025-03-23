@@ -8,8 +8,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/mabd-dev/taski/internal/models"
-	"github.com/mabd-dev/taski/internal/renderer"
+	"github.com/mabd-dev/taski/internal/domain/models"
+	"github.com/mabd-dev/taski/internal/presentation"
 )
 
 // TODO: this code is redundent with cmd package, find a way to combine them
@@ -45,7 +45,7 @@ func list(s session, input string) error {
 		}
 		return nil
 	} else {
-		renderer.RenderTable(tasks)
+		presentation.RenderTable(tasks)
 	}
 
 	return nil
@@ -66,7 +66,7 @@ func help(s session, input string) error {
 		alternativeNames := strings.Join(cmd.alternativeNames, ", ")
 		rawData = append(rawData, []string{coloredName, cmd.description, alternativeNames})
 	}
-	renderer.RenderRawData(rawData)
+	presentation.RenderRawData(rawData)
 
 	return nil
 }

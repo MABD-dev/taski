@@ -7,7 +7,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/mabd-dev/taski/internal/db"
+	"github.com/mabd-dev/taski/internal/data/db"
 )
 
 func StartRepl() {
@@ -20,8 +20,11 @@ func StartRepl() {
 
 	scanner := bufio.NewScanner(os.Stdin)
 
+	resetColor := "\033[0m"
+	greenColor := "\033[32m"
+
 	for {
-		fmt.Printf("taski > ")
+		fmt.Printf("%vtaski>%v ", greenColor, resetColor)
 
 		scanner.Scan()
 		text := scanner.Text()

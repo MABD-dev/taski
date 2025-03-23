@@ -1,4 +1,4 @@
-package renderer
+package presentation
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/aquasecurity/table"
-	"github.com/mabd-dev/taski/internal/models"
+	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
 func RenderTable(tasks []models.Task) {

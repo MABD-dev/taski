@@ -1,6 +1,6 @@
 package repl
 
-import "github.com/mabd-dev/taski/internal/db"
+import "github.com/mabd-dev/taski/internal/data/db"
 
 type session struct {
 	db db.Db

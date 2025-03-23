@@ -3,7 +3,7 @@ package cmd
 import (
 	"slices"
 
-	"github.com/mabd-dev/taski/internal/models"
+	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
 func stringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
