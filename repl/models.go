@@ -1,9 +1,11 @@
 package repl
 
-import "github.com/mabd-dev/taski/internal/data/db"
+import (
+	"github.com/mabd-dev/taski/internal/domain/repos"
+)
 
 type session struct {
-	db db.Db
+	tasksRepo repos.TasksRepoStruct
 }
 
 type command struct {

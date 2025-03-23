@@ -7,15 +7,14 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/mabd-dev/taski/internal/data/db"
+	"github.com/mabd-dev/taski/internal/domain/repos"
 )
 
 func StartRepl() {
 	fmt.Println("Taski REPL v0.1")
 
-	db := db.GetDb()
 	session := session{
-		db: db,
+		tasksRepo: repos.TasksRepo,
 	}
 
 	scanner := bufio.NewScanner(os.Stdin)

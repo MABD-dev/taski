@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/mabd-dev/taski/internal/data/db"
+	"github.com/mabd-dev/taski/internal/domain/repos"
 	"github.com/mabd-dev/taski/internal/presentation"
 	"github.com/spf13/cobra"
 )
@@ -17,8 +17,7 @@ var ListCmd = &cobra.Command{
 			panic(err)
 		}
 
-		db := db.GetDb()
-		tasks := db.List()
+		tasks := repos.TasksRepo.List()
 
 		if len(statuses) != 0 {
 			statuses, err := stringArrayToTaskStatus(statuses)

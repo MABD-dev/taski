@@ -14,7 +14,7 @@ import (
 
 // TODO: this code is redundent with cmd package, find a way to combine them
 func list(s session, input string) error {
-	tasks := s.db.List()
+	tasks := s.tasksRepo.List()
 
 	// parsing status filtering flags
 	statusValues := []string{}
