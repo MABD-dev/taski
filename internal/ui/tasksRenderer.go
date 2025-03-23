@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/aquasecurity/table"
 	"github.com/mabd-dev/taski/internal/domain/models"
@@ -19,6 +21,61 @@ func RenderTable(tasks []models.Task) {
 		table.AddRow(strconv.Itoa(task.Number), task.Name, task.Description, task.Status.ToString(), datetimeFormatted)
 	}
 	table.Render()
+}
+
+func RenderKanbanBoard(tasks []models.Task) {
+
+	taskToStatusMap := map[models.TaskStatus][]models.Task{}
+	taskToStatusMap[models.Todo] = []models.Task{}
+	taskToStatusMap[models.InProgress] = []models.Task{}
+	taskToStatusMap[models.Done] = []models.Task{}
+
+	for _, task := range tasks {
+		taskToStatusMap[task.Status] = append(taskToStatusMap[task.Status], task)
+	}
+
+	maxNumberOfRows := 0
+	for _, statusTasks := range taskToStatusMap {
+		maxNumberOfRows = max(maxNumberOfRows, len(statusTasks))
+	}
+
+	table := table.New(os.Stdout)
+	table.SetHeaders(models.Todo.ToString(), models.InProgress.ToString(), models.Done.ToString())
+
+	for i := range maxNumberOfRows {
+		todoTaskName := ""
+		inProgressTaskName := ""
+		doneTaskName := ""
+
+		if len(taskToStatusMap[models.Todo]) > i {
+			todoTaskName = formatTaskForKanbanBoard(taskToStatusMap[models.Todo][i])
+		}
+
+		if len(taskToStatusMap[models.InProgress]) > i {
+			inProgressTaskName = formatTaskForKanbanBoard(taskToStatusMap[models.InProgress][i])
+		}
+
+		if len(taskToStatusMap[models.Done]) > i {
+			doneTaskName = formatTaskForKanbanBoard(taskToStatusMap[models.Done][i])
+		}
+
+		table.AddRow(todoTaskName, inProgressTaskName, doneTaskName)
+	}
+
+	table.Render()
+}
+
+func formatTaskForKanbanBoard(task models.Task) string {
+	var sb strings.Builder
+
+	sb.WriteString(strconv.Itoa(task.Number))
+	sb.WriteString(". ")
+	sb.WriteString(task.Name)
+	if utf8.RuneCountInString(task.Description) > 0 {
+		sb.WriteString("\n - ")
+		sb.WriteString(task.Description)
+	}
+	return sb.String()
 }
 
 func RenderRawData(data [][]string) {

@@ -18,7 +18,7 @@ var ListCmd = &cobra.Command{
 		}
 
 		tasks := repos.TasksRepo.ListWithFilters(statuses)
-		ui.RenderTable(tasks)
+		ui.RenderKanbanBoard(tasks)
 
 		return nil
 	},

@@ -36,7 +36,7 @@ func list(s session, input string) error {
 		}
 		return nil
 	} else {
-		ui.RenderTable(tasks)
+		ui.RenderKanbanBoard(tasks)
 	}
 
 	return nil
