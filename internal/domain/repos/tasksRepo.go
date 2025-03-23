@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/mabd-dev/taski/internal/data/db"
+	"github.com/mabd-dev/taski/internal/domain/converter"
 	"github.com/mabd-dev/taski/internal/domain/models"
 	"github.com/mabd-dev/taski/internal/domain/validator"
 )
@@ -31,12 +32,24 @@ func (repo *TasksRepoStruct) List() []models.Task {
 	return repo.db.List()
 }
 
+func (repo *TasksRepoStruct) ListWithFilters(statusFilters []string) []models.Task {
+	tasks := repo.db.List()
+	if len(statusFilters) != 0 {
+		statuses, err := converter.StringArrayToTaskStatus(statusFilters)
+		if err != nil {
+			panic(err)
+		}
+		tasks = converter.FilterByStatus(tasks, statuses)
+	}
+	return tasks
+}
+
 func (repo *TasksRepoStruct) Add(name string, description string, status models.TaskStatus) error {
 	if err := validator.TaskName(name); err != nil {
 		return err
 	}
 
-	if err := validator.TaskName(description); err != nil {
+	if err := validator.TaskDescription(description); err != nil {
 		return err
 	}
 	return repo.db.Add(name, description, status)
@@ -54,7 +67,7 @@ func (repo *TasksRepoStruct) Update(taskNumber int, name *string, description *s
 	}
 
 	if description != nil {
-		if err := validator.TaskName(*description); err != nil {
+		if err := validator.TaskDescription(*description); err != nil {
 			return err
 		}
 	}

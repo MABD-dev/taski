@@ -8,12 +8,10 @@ import (
 	"strings"
 
 	"github.com/mabd-dev/taski/internal/ui"
-	"github.com/mabd-dev/taski/internal/domain/converter"
 )
 
 // TODO: this code is redundent with cmd package, find a way to combine them
 func list(s session, input string) error {
-	tasks := s.tasksRepo.List()
 
 	// parsing status filtering flags
 	statusValues := []string{}
@@ -28,13 +26,7 @@ func list(s session, input string) error {
 	parts := strings.Fields(input)
 	listFlags.Parse(parts[1:])
 
-	if len(statusValues) > 0 {
-		statuses, err := converter.StringArrayToTaskStatus(statusValues)
-		if err != nil {
-			return err
-		}
-		tasks = converter.FilterByStatus(tasks, statuses)
-	}
+	tasks := s.tasksRepo.ListWithFilters(statusValues)
 
 	if len(tasks) == 0 {
 		if len(statusValues) > 0 {

@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"github.com/mabd-dev/taski/internal/domain/converter"
 	"github.com/mabd-dev/taski/internal/domain/repos"
 	"github.com/mabd-dev/taski/internal/ui"
 	"github.com/spf13/cobra"
@@ -18,17 +17,9 @@ var ListCmd = &cobra.Command{
 			panic(err)
 		}
 
-		tasks := repos.TasksRepo.List()
-
-		if len(statuses) != 0 {
-			statuses, err := converter.StringArrayToTaskStatus(statuses)
-			if err != nil {
-				panic(err)
-			}
-			tasks = converter.FilterByStatus(tasks, statuses)
-		}
-
+		tasks := repos.TasksRepo.ListWithFilters(statuses)
 		ui.RenderTable(tasks)
+
 		return nil
 	},
 }
