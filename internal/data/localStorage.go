@@ -10,12 +10,13 @@ type LocalStorage[T any] struct {
 	FileName string
 }
 
-func NewLocalStorage[T any](filename string) *LocalStorage[T] {
-	return &LocalStorage[T]{FileName: filename}
-}
-
+// Save given data to file
+// @Returns:
+//
+//	error if
+//	    -
 func (s *LocalStorage[T]) Save(data T) error {
-	filePath, err := createFilePath(s.FileName)
+	filePath, err := getOrCreateFilePath(s.FileName)
 	if err != nil {
 		return err
 	}
@@ -28,8 +29,13 @@ func (s *LocalStorage[T]) Save(data T) error {
 	return nil
 }
 
+// Read/create users json file data dn load them indo data pointer
+//
+// @Returns:
+//
+//	error if was not able to get/create file path or read the file
 func (s *LocalStorage[T]) Load(data *T) error {
-	filePath, err := createFilePath(s.FileName)
+	filePath, err := getOrCreateFilePath(s.FileName)
 	if err != nil {
 		return err
 	}
@@ -42,7 +48,13 @@ func (s *LocalStorage[T]) Load(data *T) error {
 	return json.Unmarshal(fileData, data)
 }
 
-func createFilePath(filename string) (string, error) {
+// Create root dir, then a file inside it with given filename
+//
+// @Returns:
+//
+//	full path of file: if was able to create it
+//	error: if creating root dir failed
+func getOrCreateFilePath(filename string) (string, error) {
 	taskiDir, err := getOrCreateRootDir()
 	if err != nil {
 		return "", nil
@@ -51,6 +63,12 @@ func createFilePath(filename string) (string, error) {
 	return fileFullPath, nil
 }
 
+// Create hidden root dir for this project at users device home dir
+//
+// @Returns:
+//
+//	full path of root dir: if successful
+//	error: if getting user home dir failed, or was not able to create folder due to permissions maybe
 func getOrCreateRootDir() (string, error) {
 	// TODO: make this configurable
 	// path from root directory

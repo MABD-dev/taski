@@ -13,7 +13,7 @@ import (
 
 func main() {
 	storageFileName := "tasks.json"
-	storage := data.NewLocalStorage[[]models.Task](storageFileName)
+	storage := &data.LocalStorage[[]models.Task]{FileName: storageFileName}
 	persistentDb := db.NewPersistentDb(storage)
 	repos.CreateTasksRepo(persistentDb)
 
