@@ -32,6 +32,10 @@ func (repo *TasksRepoStruct) GetAll() []models.Task {
 	return repo.db.GetAll()
 }
 
+func (repo *TasksRepoStruct) Get(taskNumber int) *models.Task {
+	return repo.db.Get(taskNumber)
+}
+
 func (repo *TasksRepoStruct) ListWithFilters(statusFilters []string) []models.Task {
 	tasks := repo.db.GetAll()
 	if len(statusFilters) != 0 {
@@ -68,6 +72,12 @@ func (repo *TasksRepoStruct) Update(taskNumber int, name *string, description *s
 
 	if description != nil {
 		if err := validator.TaskDescription(*description); err != nil {
+			return err
+		}
+	}
+
+	if status != nil {
+		if err := validator.TaskStatus(*status); err != nil {
 			return err
 		}
 	}

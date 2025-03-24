@@ -3,6 +3,8 @@ package validator
 import (
 	"errors"
 	"unicode/utf8"
+
+	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
 func TaskName(value string) error {
@@ -22,5 +24,12 @@ func TaskDescription(value string) error {
 		return errors.New("description must be less than 200 characters")
 	}
 
+	return nil
+}
+
+func TaskStatus(value models.TaskStatus) error {
+	if value != models.Todo && value != models.InProgress && value != models.Done {
+		return errors.New("invalid status")
+	}
 	return nil
 }

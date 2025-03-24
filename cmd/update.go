@@ -1,6 +1,10 @@
 package cmd
 
 import (
+	"encoding/json"
+	"errors"
+	"os"
+	"os/exec"
 	"strconv"
 
 	"github.com/mabd-dev/taski/internal/domain/models"
@@ -21,38 +25,17 @@ var UpdateCmd = &cobra.Command{
 			panic(err)
 		}
 
-		var name *string = nil
-		if cmd.Flags().Changed("name") {
-			nameStr, err := cmd.Flags().GetString("name")
-			if err != nil {
-				panic(err)
-			}
-			name = &nameStr
+		task := repos.TasksRepo.Get(taskNumber)
+		if task == nil {
+			return errors.New("could not find task!")
 		}
 
-		var description *string = nil
-		if cmd.Flags().Changed("description") {
-			descStr, err := cmd.Flags().GetString("description")
-			if err != nil {
-				panic(err)
-			}
-			description = &descStr
+		err = openTaskEditor(task)
+		if err != nil {
+			return err
 		}
 
-		var status *models.TaskStatus = nil
-		if cmd.Flags().Changed("status") {
-			statusStr, err := cmd.Flags().GetString("status")
-			if err != nil {
-				panic(err)
-			}
-			s, err := models.TaskStatusStrToStatus(statusStr)
-			if err != nil {
-				panic(err)
-			}
-			status = &s
-		}
-
-		err = repos.TasksRepo.Update(taskNumber, name, description, status)
+		err = repos.TasksRepo.Update(taskNumber, &task.Name, &task.Description, &task.Status)
 		if err != nil {
 			return err
 		}
@@ -60,4 +43,52 @@ var UpdateCmd = &cobra.Command{
 		ui.RenderKanbanBoard(repos.TasksRepo.GetAll())
 		return nil
 	},
+}
+
+func openTaskEditor(task *models.Task) error {
+	tmpFile, err := os.CreateTemp("", "edit-task.json")
+	if err != nil {
+		return err
+	}
+
+	defer os.Remove(tmpFile.Name())
+
+	jsonData, err := json.MarshalIndent(task, "", "    ")
+	if err != nil {
+		return err
+	}
+
+	if _, err := tmpFile.Write(jsonData); err != nil {
+		return err
+	}
+	if err := tmpFile.Close(); err != nil {
+		return err
+	}
+
+	// Determine the user's preferred text editor
+	editor := os.Getenv("EDITOR")
+	if editor == "" {
+		editor = "vi"
+	}
+
+	// Open the text editor
+	cmd := exec.Command(editor, tmpFile.Name())
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+
+	editedTextBytes, err := os.ReadFile(tmpFile.Name())
+	if err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(editedTextBytes, task); err != nil {
+		return err
+	}
+
+	return nil
 }
