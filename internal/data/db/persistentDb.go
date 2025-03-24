@@ -39,8 +39,8 @@ func (db *PersistentDb) Get(taskNumber int) *models.Task {
 	return db.InMemoryDb.Get(taskNumber)
 }
 
-func (db *PersistentDb) Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error {
-	err := db.InMemoryDb.Update(taskNumber, name, description, status)
+func (db *PersistentDb) Update(taskNumber int, task models.Task) error {
+	err := db.InMemoryDb.Update(taskNumber, task)
 	if err != nil {
 		return err
 	}

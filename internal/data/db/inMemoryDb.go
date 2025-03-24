@@ -47,24 +47,13 @@ func (db *InMemoryDb) Get(taskNumber int) *models.Task {
 	return nil
 }
 
-func (db *InMemoryDb) Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error {
+func (db *InMemoryDb) Update(taskNumber int, task models.Task) error {
 	taskIndex := db.getTaskIndexFromNumber(taskNumber)
 	if taskIndex == -1 {
 		return errors.New("Could not find task")
 	}
 
 	tasks := *db.Tasks
-	task := tasks[taskIndex]
-
-	if name != nil {
-		task.Name = *name
-	}
-	if description != nil {
-		task.Description = *description
-	}
-	if status != nil {
-		task.Status = *status
-	}
 	tasks[taskIndex] = task
 
 	return nil

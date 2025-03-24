@@ -35,7 +35,7 @@ var UpdateCmd = &cobra.Command{
 			return err
 		}
 
-		err = repos.TasksRepo.Update(taskNumber, &task.Name, &task.Description, &task.Status)
+		err = repos.TasksRepo.Update(taskNumber, *task)
 		if err != nil {
 			return err
 		}
