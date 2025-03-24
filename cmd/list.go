@@ -12,13 +12,16 @@ var ListCmd = &cobra.Command{
 	Long:  "List all your tasks",
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		statuses, err := cmd.Flags().GetStringArray("status")
+		searchTerm, err := cmd.Flags().GetStringArray("search")
 		if err != nil {
 			panic(err)
 		}
 
-		tasks := repos.TasksRepo.ListWithFilters(statuses)
-		ui.RenderKanbanBoard(tasks)
+		tasks := repos.TasksRepo.GetAll()
+
+		rawData := ui.TasksToRawData(tasks)
+		ui.HighlightTerms(&rawData, searchTerm)
+		ui.RenderRawData(rawData)
 
 		return nil
 	},
