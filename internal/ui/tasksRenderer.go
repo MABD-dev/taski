@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -24,6 +23,25 @@ func RenderTable(tasks []models.Task) {
 }
 
 func RenderKanbanBoard(tasks []models.Task) {
+	rawData := TasksToRawData(tasks)
+	RenderRawData(rawData)
+}
+
+func RenderRawData(data [][]string) {
+	table := table.New(os.Stdout)
+
+	for i, row := range data {
+		if i == 0 { // header
+			table.SetHeaders(row...)
+		} else {
+			table.AddRow(row...)
+		}
+	}
+	table.Render()
+}
+
+func TasksToRawData(tasks []models.Task) [][]string {
+	output := [][]string{}
 
 	taskToStatusMap := map[models.TaskStatus][]models.Task{}
 	taskToStatusMap[models.Todo] = []models.Task{}
@@ -39,8 +57,7 @@ func RenderKanbanBoard(tasks []models.Task) {
 		maxNumberOfRows = max(maxNumberOfRows, len(statusTasks))
 	}
 
-	table := table.New(os.Stdout)
-	table.SetHeaders(models.Todo.ToString(), models.InProgress.ToString(), models.Done.ToString())
+	output = append(output, []string{models.Todo.ToString(), models.InProgress.ToString(), models.Done.ToString()})
 
 	for i := range maxNumberOfRows {
 		todoTaskName := ""
@@ -59,10 +76,10 @@ func RenderKanbanBoard(tasks []models.Task) {
 			doneTaskName = formatTaskForKanbanBoard(taskToStatusMap[models.Done][i])
 		}
 
-		table.AddRow(todoTaskName, inProgressTaskName, doneTaskName)
+		output = append(output, []string{todoTaskName, inProgressTaskName, doneTaskName})
 	}
 
-	table.Render()
+	return output
 }
 
 func formatTaskForKanbanBoard(task models.Task) string {
@@ -76,40 +93,6 @@ func formatTaskForKanbanBoard(task models.Task) string {
 		sb.WriteString(task.Description)
 	}
 	return sb.String()
-}
-
-func RenderRawData(data [][]string) {
-	table := table.New(os.Stdout)
-
-	for i, row := range data {
-		if i == 0 { // header
-			table.SetHeaders(row...)
-		} else {
-			table.AddRow(row...)
-		}
-	}
-	table.Render()
-}
-
-// Maybe, just maybe this is not needed. But who cres, it's nice
-func RenderTableByStatus(tasks []models.Task) {
-	statusToTasks := make(map[models.TaskStatus][]models.Task)
-	statusToTasks[models.Todo] = []models.Task{}
-	statusToTasks[models.InProgress] = []models.Task{}
-	statusToTasks[models.Done] = []models.Task{}
-
-	for _, task := range tasks {
-		statusToTasks[task.Status] = append(statusToTasks[task.Status], task)
-	}
-
-	fmt.Printf("%v tasks\n", models.Todo.ToString())
-	RenderTable(statusToTasks[models.Todo])
-
-	fmt.Printf("\n%v tasks\n", models.InProgress.ToString())
-	RenderTable(statusToTasks[models.InProgress])
-
-	fmt.Printf("\n%v tasks\n", models.Done.ToString())
-	RenderTable(statusToTasks[models.Done])
 }
 
 func formatDatetime(datetime time.Time) string {
