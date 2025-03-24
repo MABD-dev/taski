@@ -10,11 +10,10 @@ type PersistentDb struct {
 	storage data.LocalStorage[[]models.Task]
 }
 
-func NewPersistentDb(storage *data.LocalStorage[[]models.Task]) *PersistentDb {
-	tasks := make([]models.Task, 0)
-	inMemoryDb := &InMemoryDb{
-		Tasks: &tasks,
-	}
+func NewPersistentDb(
+	storage *data.LocalStorage[[]models.Task],
+	inMemoryDb *InMemoryDb,
+) *PersistentDb {
 	storage.Load(inMemoryDb.Tasks)
 
 	return &PersistentDb{

@@ -14,7 +14,13 @@ import (
 func main() {
 	storageFileName := "tasks.json"
 	storage := &data.LocalStorage[[]models.Task]{FileName: storageFileName}
-	persistentDb := db.NewPersistentDb(storage)
+
+	tasks := make([]models.Task, 0)
+	inMemoryDb := db.InMemoryDb{
+		Tasks: &tasks,
+	}
+
+	persistentDb := db.NewPersistentDb(storage, &inMemoryDb)
 	repos.CreateTasksRepo(persistentDb)
 
 	cmd.Execute()
