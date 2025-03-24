@@ -21,14 +21,11 @@ type Db interface {
 	// Update task name, description or staus if any is provided
 	//
 	// @Parameters:
-	//     name: new name. If nil, old name will not be changed
-	//     description: new description. If nil, old description will not be changed
-	//     status: new status. If nil, old status will not be changed
-	//
+	//     task: take new task data and update it in db
 	//
 	// @Returns:
 	//     error if taskNumber is invalid
-	Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error
+	Update(taskNumber int, task models.Task) error
 
 	// Delete all all with matching numbers.
 	// Each taskNumber will be avaluated alone, when invalid number is found, function

@@ -3,10 +3,9 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 
 
 ## Features
-- Add Tasks: quickly add tasks with name, description and status.
-- Update Tasks: update task name, description or status.
-- Delete Tasks: with one command you can delete 1 or more tasks
-- List Tasks: show tasks in a nice table showing each task information.
+- Add, Update, and Delete Tasks
+- List Tasks: show tasks in kanban style table.
+  - search tasks based on keyword(s) and highlight in kanban table/board
 - Data is saved locally on your machine in a json file
 
 
@@ -39,10 +38,7 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 1. **Listing Tasks**
     ```sh
     taski list # get list of all tasks 
-    taski list -s todo # list tasks with status = todo
-    taski list -s todo -s inprogress # list tasks with both status = todo and in-progress
-    # You can mix and match status types
-    # all possible task status options are: todo, inprogress, done
+    taski list -s "bug" # show all tasks and highlight 'bug' keyword
     ```
 2. **Add Task**
     ```sh
@@ -53,9 +49,10 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 
 3. **Update Task**
     ```sh
-    taski update <task number> -n "new name" -d "new description" -s <new status>
-    # you can mix and match any of these flags. At least one flag must be set
+    taski update <task number> 
     ```
+    This will open preferred editor in your terminal (default to vi) to be able to edit task data.
+    Close editor to save new changes
 
 4. **Delete Task**
     ```sh

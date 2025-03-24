@@ -19,10 +19,18 @@ func TestInMemoryDb_Update(t *testing.T) {
 	newDescription := "dd"
 	newStatus := models.Done
 
+	defaultTask := models.Task{
+		Number:      1,
+		Name:        "a",
+		Description: "d",
+		Status:      models.Todo,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   nil,
+	}
+
 	tests := []struct {
 		name         string
 		taskToInsert models.Task
-		data         taskToUpdate
 		expectedTask models.Task
 		taskNumber   int
 		wantErr      bool
@@ -33,37 +41,15 @@ func TestInMemoryDb_Update(t *testing.T) {
 			wantErr:    true,
 		},
 		{
-			name: "Update nothing",
-			taskToInsert: models.Task{
-				Number:      1,
-				Name:        "a",
-				Description: "d",
-				Status:      models.Todo,
-				CreatedAt:   time.Now(),
-				UpdatedAt:   nil,
-			},
-			expectedTask: models.Task{
-				Number:      1,
-				Name:        "a",
-				Description: "d",
-				Status:      models.Todo,
-				CreatedAt:   time.Now(),
-				UpdatedAt:   nil,
-			},
-			data:       taskToUpdate{},
-			taskNumber: 1,
-			wantErr:    false,
+			name:         "Update nothing",
+			taskToInsert: defaultTask,
+			expectedTask: defaultTask,
+			taskNumber:   1,
+			wantErr:      false,
 		},
 		{
-			name: "Update name only",
-			taskToInsert: models.Task{
-				Number:      1,
-				Name:        "a",
-				Description: "d",
-				Status:      models.Todo,
-				CreatedAt:   time.Now(),
-				UpdatedAt:   nil,
-			},
+			name:         "Update name only",
+			taskToInsert: defaultTask,
 			expectedTask: models.Task{
 				Number:      1,
 				Name:        newName,
@@ -72,20 +58,12 @@ func TestInMemoryDb_Update(t *testing.T) {
 				CreatedAt:   time.Now(),
 				UpdatedAt:   nil,
 			},
-			data:       taskToUpdate{name: &newName},
 			taskNumber: 1,
 			wantErr:    false,
 		},
 		{
-			name: "Update description only",
-			taskToInsert: models.Task{
-				Number:      1,
-				Name:        "a",
-				Description: "d",
-				Status:      models.Todo,
-				CreatedAt:   time.Now(),
-				UpdatedAt:   nil,
-			},
+			name:         "Update description only",
+			taskToInsert: defaultTask,
 			expectedTask: models.Task{
 				Number:      1,
 				Name:        "a",
@@ -94,20 +72,12 @@ func TestInMemoryDb_Update(t *testing.T) {
 				CreatedAt:   time.Now(),
 				UpdatedAt:   nil,
 			},
-			data:       taskToUpdate{description: &newDescription},
 			taskNumber: 1,
 			wantErr:    false,
 		},
 		{
-			name: "Update status only",
-			taskToInsert: models.Task{
-				Number:      1,
-				Name:        "a",
-				Description: "d",
-				Status:      models.Todo,
-				CreatedAt:   time.Now(),
-				UpdatedAt:   nil,
-			},
+			name:         "Update status only",
+			taskToInsert: defaultTask,
 			expectedTask: models.Task{
 				Number:      1,
 				Name:        "a",
@@ -116,20 +86,12 @@ func TestInMemoryDb_Update(t *testing.T) {
 				CreatedAt:   time.Now(),
 				UpdatedAt:   nil,
 			},
-			data:       taskToUpdate{status: &newStatus},
 			taskNumber: 1,
 			wantErr:    false,
 		},
 		{
-			name: "Update tas",
-			taskToInsert: models.Task{
-				Number:      1,
-				Name:        "a",
-				Description: "d",
-				Status:      models.Todo,
-				CreatedAt:   time.Now(),
-				UpdatedAt:   nil,
-			},
+			name:         "Update tas",
+			taskToInsert: defaultTask,
 			expectedTask: models.Task{
 				Number:      1,
 				Name:        newName,
@@ -137,11 +99,6 @@ func TestInMemoryDb_Update(t *testing.T) {
 				Status:      newStatus,
 				CreatedAt:   time.Now(),
 				UpdatedAt:   nil,
-			},
-			data: taskToUpdate{
-				name:        &newName,
-				description: &newDescription,
-				status:      &newStatus,
 			},
 			taskNumber: 1,
 			wantErr:    false,
@@ -153,7 +110,7 @@ func TestInMemoryDb_Update(t *testing.T) {
 			db := db.InMemoryDb{
 				Tasks: &[]models.Task{tt.taskToInsert},
 			}
-			err := db.Update(tt.taskNumber, tt.data.name, tt.data.description, tt.data.status)
+			err := db.Update(tt.taskNumber, tt.expectedTask)
 			if err != nil {
 				if !tt.wantErr {
 					t.Fatalf("Expected error=%v", err)
