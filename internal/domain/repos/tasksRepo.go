@@ -28,12 +28,12 @@ func CreateTasksRepo(db db.Db) TasksRepoStruct {
 	return TasksRepo
 }
 
-func (repo *TasksRepoStruct) List() []models.Task {
-	return repo.db.List()
+func (repo *TasksRepoStruct) GetAll() []models.Task {
+	return repo.db.GetAll()
 }
 
 func (repo *TasksRepoStruct) ListWithFilters(statusFilters []string) []models.Task {
-	tasks := repo.db.List()
+	tasks := repo.db.GetAll()
 	if len(statusFilters) != 0 {
 		statuses, err := converter.StringArrayToTaskStatus(statusFilters)
 		if err != nil {

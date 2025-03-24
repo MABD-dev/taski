@@ -3,7 +3,8 @@ package db
 import "github.com/mabd-dev/taski/internal/domain/models"
 
 type Db interface {
-	List() []models.Task
+	// Get all tasks
+	GetAll() []models.Task
 	Add(name string, description string, status models.TaskStatus) error
 	Get(taskNumber int) *models.Task
 	Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error

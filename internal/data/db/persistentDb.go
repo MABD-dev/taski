@@ -24,8 +24,8 @@ func NewPersistentDb() *PersistentDb {
 	}
 }
 
-func (db *PersistentDb) List() []models.Task {
-	return db.InMemoryDb.List()
+func (db *PersistentDb) GetAll() []models.Task {
+	return db.InMemoryDb.GetAll()
 }
 
 func (db *PersistentDb) Add(name string, description string, status models.TaskStatus) error {

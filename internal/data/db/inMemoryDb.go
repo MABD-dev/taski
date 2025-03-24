@@ -13,7 +13,7 @@ type InMemoryDb struct {
 	Tasks *[]models.Task
 }
 
-func (db *InMemoryDb) List() []models.Task {
+func (db *InMemoryDb) GetAll() []models.Task {
 	return *db.Tasks
 }
 

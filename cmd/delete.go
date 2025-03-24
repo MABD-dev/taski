@@ -32,7 +32,7 @@ $ ./tasks delete 1 2 3 4 5
 			return err
 		}
 
-		ui.RenderKanbanBoard(repos.TasksRepo.List())
+		ui.RenderKanbanBoard(repos.TasksRepo.GetAll())
 		return nil
 	},
 }
