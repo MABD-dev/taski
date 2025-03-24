@@ -13,11 +13,10 @@ type InMemoryDb struct {
 	Tasks *[]models.Task
 }
 
-func (db *InMemoryDb) List() []models.Task {
+func (db *InMemoryDb) GetAll() []models.Task {
 	return *db.Tasks
 }
 
-// Assuming data is already valid
 func (db *InMemoryDb) Add(name string, description string, status models.TaskStatus) error {
 
 	maxTaxNumber := 0
@@ -48,7 +47,6 @@ func (db *InMemoryDb) Get(taskNumber int) *models.Task {
 	return nil
 }
 
-// Assuming data is already valid
 func (db *InMemoryDb) Update(taskNumber int, name *string, description *string, status *models.TaskStatus) error {
 	taskIndex := db.getTaskIndexFromNumber(taskNumber)
 	if taskIndex == -1 {
@@ -72,21 +70,11 @@ func (db *InMemoryDb) Update(taskNumber int, name *string, description *string, 
 	return nil
 }
 
-func (db *InMemoryDb) Delete(number int) error {
-	taskIndex := db.getTaskIndexFromNumber(number)
-	if taskIndex == -1 {
-		return fmt.Errorf("Could not find task with specified number=%v", number)
-	}
-
-	*db.Tasks = slices.Delete(*db.Tasks, taskIndex, taskIndex+1)
-	return nil
-}
-
-func (db *InMemoryDb) DeleteAll(taskNumbers []int) error {
+func (db *InMemoryDb) Delete(taskNumbers ...int) error {
 	for _, taskNumber := range taskNumbers {
 		taskIndex := db.getTaskIndexFromNumber(taskNumber)
 		if taskIndex == -1 {
-			return fmt.Errorf("Could not find task with specified number=%v", taskNumber)
+			return fmt.Errorf("Could not find task with number=%v", taskNumber)
 		}
 
 		*db.Tasks = slices.Delete(*db.Tasks, taskIndex, taskIndex+1)
@@ -103,16 +91,4 @@ func (db *InMemoryDb) getTaskIndexFromNumber(number int) int {
 		}
 	}
 	return -1
-}
-
-func (db *InMemoryDb) findMaxTaskNumber() int {
-	maxNumber := 1
-
-	t := *db.Tasks
-	for i := range t {
-		if t[i].Number > maxNumber {
-			maxNumber = t[i].Number
-		}
-	}
-	return maxNumber
 }

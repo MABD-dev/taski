@@ -34,7 +34,7 @@ var AddCmd = &cobra.Command{
 			return err
 		}
 
-		ui.RenderKanbanBoard(repos.TasksRepo.List())
+		ui.RenderKanbanBoard(repos.TasksRepo.GetAll())
 		return nil
 	},
 }

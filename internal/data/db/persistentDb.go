@@ -10,8 +10,7 @@ type PersistentDb struct {
 	storage data.LocalStorage[[]models.Task]
 }
 
-func NewPersistentDb() *PersistentDb {
-	storage := data.NewLocalStorage[[]models.Task]("tasks.json")
+func NewPersistentDb(storage *data.LocalStorage[[]models.Task]) *PersistentDb {
 	tasks := make([]models.Task, 0)
 	inMemoryDb := &InMemoryDb{
 		Tasks: &tasks,
@@ -24,8 +23,8 @@ func NewPersistentDb() *PersistentDb {
 	}
 }
 
-func (db *PersistentDb) List() []models.Task {
-	return db.InMemoryDb.List()
+func (db *PersistentDb) GetAll() []models.Task {
+	return db.InMemoryDb.GetAll()
 }
 
 func (db *PersistentDb) Add(name string, description string, status models.TaskStatus) error {
@@ -50,17 +49,8 @@ func (db *PersistentDb) Update(taskNumber int, name *string, description *string
 	return nil
 }
 
-func (db *PersistentDb) Delete(number int) error {
-	err := db.InMemoryDb.Delete(number)
-	if err != nil {
-		return err
-	}
-	db.save()
-	return nil
-}
-
-func (db *PersistentDb) DeleteAll(taskNumbers []int) error {
-	err := db.InMemoryDb.DeleteAll(taskNumbers)
+func (db *PersistentDb) Delete(taskNumbers ...int) error {
+	err := db.InMemoryDb.Delete(taskNumbers...)
 	if err != nil {
 		return err
 	}

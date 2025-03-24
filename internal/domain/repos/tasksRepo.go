@@ -28,12 +28,12 @@ func CreateTasksRepo(db db.Db) TasksRepoStruct {
 	return TasksRepo
 }
 
-func (repo *TasksRepoStruct) List() []models.Task {
-	return repo.db.List()
+func (repo *TasksRepoStruct) GetAll() []models.Task {
+	return repo.db.GetAll()
 }
 
 func (repo *TasksRepoStruct) ListWithFilters(statusFilters []string) []models.Task {
-	tasks := repo.db.List()
+	tasks := repo.db.GetAll()
 	if len(statusFilters) != 0 {
 		statuses, err := converter.StringArrayToTaskStatus(statusFilters)
 		if err != nil {
@@ -75,18 +75,11 @@ func (repo *TasksRepoStruct) Update(taskNumber int, name *string, description *s
 	return repo.db.Update(taskNumber, name, description, status)
 }
 
-func (repo *TasksRepoStruct) Delete(number int) error {
-	if number < 0 {
-		return InvalidTaskNumber
-	}
-	return repo.db.Delete(number)
-}
-
-func (repo *TasksRepoStruct) DeleteAll(taskNumbers []int) error {
+func (repo *TasksRepoStruct) Delete(taskNumbers ...int) error {
 	for _, number := range taskNumbers {
 		if number < 0 {
 			return InvalidTaskNumber
 		}
 	}
-	return repo.db.DeleteAll(taskNumbers)
+	return repo.db.Delete(taskNumbers...)
 }
