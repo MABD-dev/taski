@@ -72,17 +72,7 @@ func (db *InMemoryDb) Update(taskNumber int, name *string, description *string, 
 	return nil
 }
 
-func (db *InMemoryDb) Delete(number int) error {
-	taskIndex := db.getTaskIndexFromNumber(number)
-	if taskIndex == -1 {
-		return fmt.Errorf("Could not find task with specified number=%v", number)
-	}
-
-	*db.Tasks = slices.Delete(*db.Tasks, taskIndex, taskIndex+1)
-	return nil
-}
-
-func (db *InMemoryDb) DeleteAll(taskNumbers []int) error {
+func (db *InMemoryDb) Delete(taskNumbers ...int) error {
 	for _, taskNumber := range taskNumbers {
 		taskIndex := db.getTaskIndexFromNumber(taskNumber)
 		if taskIndex == -1 {

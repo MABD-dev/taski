@@ -50,17 +50,8 @@ func (db *PersistentDb) Update(taskNumber int, name *string, description *string
 	return nil
 }
 
-func (db *PersistentDb) Delete(number int) error {
-	err := db.InMemoryDb.Delete(number)
-	if err != nil {
-		return err
-	}
-	db.save()
-	return nil
-}
-
-func (db *PersistentDb) DeleteAll(taskNumbers []int) error {
-	err := db.InMemoryDb.DeleteAll(taskNumbers)
+func (db *PersistentDb) Delete(taskNumbers ...int) error {
+	err := db.InMemoryDb.Delete(taskNumbers...)
 	if err != nil {
 		return err
 	}

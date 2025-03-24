@@ -27,7 +27,7 @@ $ ./tasks delete 1 2 3 4 5
 			taskNumbers = append(taskNumbers, taskNumber)
 		}
 
-		err := repos.TasksRepo.DeleteAll(taskNumbers)
+		err := repos.TasksRepo.Delete(taskNumbers...)
 		if err != nil {
 			return err
 		}
