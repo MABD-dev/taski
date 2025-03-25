@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -10,6 +11,13 @@ import (
 	"github.com/aquasecurity/table"
 	"github.com/fatih/color"
 	"github.com/mabd-dev/taski/internal/domain/models"
+)
+
+var (
+	taskNumberTitleFgColor      = color.New(color.FgHiBlue)
+	taskNameTitleFgColor        = color.New(color.FgHiGreen)
+	taskDescriptionTitleFgColor = color.New(color.FgHiGreen)
+	taskProjFgColor             = color.New(color.FgHiCyan)
 )
 
 func RenderTable(tasks []models.Task) {
@@ -89,6 +97,17 @@ func TasksToRawData(tasks []models.Task) [][]string {
 	return output
 }
 
+func RenderTask(task models.Task) {
+	fmt.Printf("┌%v\n", strings.Repeat("─", 50))
+
+	fmt.Printf("%v\n", taskNumberTitleFgColor.Sprintf("No. %v", task.Number))
+	fmt.Printf("%v %v\n", taskNameTitleFgColor.Sprint("Name:"), task.Name)
+	fmt.Printf("\n%v %v\n", taskDescriptionTitleFgColor.Sprint("Description:"), task.Description)
+	fmt.Printf("%v\n", formatTaskProject(task.Project))
+
+	fmt.Printf("└%v\n", strings.Repeat("─", 50))
+}
+
 func formatTaskForKanbanBoard(task models.Task) string {
 	var sb strings.Builder
 
@@ -103,10 +122,16 @@ func formatTaskForKanbanBoard(task models.Task) string {
 
 	if utf8.RuneCountInString(task.Project) > 0 {
 		sb.WriteString("\n")
-		c := color.New(color.FgHiCyan)
-		sb.WriteString(c.Sprintf("@%v", task.Project))
+		sb.WriteString(formatTaskProject(task.Project))
 	}
 	return sb.String()
+}
+
+func formatTaskProject(value string) string {
+	if utf8.RuneCountInString(value) > 0 {
+		return taskProjFgColor.Sprintf("@%v", value)
+	}
+	return value
 }
 
 func formatDatetime(datetime time.Time) string {
