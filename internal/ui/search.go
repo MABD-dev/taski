@@ -3,11 +3,8 @@ package ui
 import (
 	"regexp"
 	"strings"
-)
 
-var (
-	backgroundColor = "\033[43m"
-	foregroundColor = "\033[30m" // Black foreground
+	"github.com/fatih/color"
 )
 
 // HighlightTerms highlights all occurrences of search terms in the input slice.
@@ -16,13 +13,16 @@ func HighlightTerms(input *[][]string, searchTerms []string) {
 		return
 	}
 
+	fgColor := color.New(color.FgBlack)
+	bkColor := color.New(color.BgYellow)
+
 	pattern := "(" + strings.Join(searchTerms, "|") + ")"
 	re := regexp.MustCompile(pattern)
 
 	for i := range *input {
 		for j := range (*input)[i] {
 			(*input)[i][j] = re.ReplaceAllStringFunc((*input)[i][j], func(match string) string {
-				return backgroundColor + foregroundColor + match + "\033[0m"
+				return bkColor.Sprint(fgColor.Sprint(match))
 			})
 		}
 	}

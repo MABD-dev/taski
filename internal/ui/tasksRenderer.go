@@ -8,6 +8,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/aquasecurity/table"
+	"github.com/fatih/color"
 	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
@@ -57,7 +58,13 @@ func TasksToRawData(tasks []models.Task) [][]string {
 		maxNumberOfRows = max(maxNumberOfRows, len(statusTasks))
 	}
 
-	output = append(output, []string{models.Todo.ToString(), models.InProgress.ToString(), models.Done.ToString()})
+	c := color.New(color.FgHiGreen)
+
+	output = append(output, []string{
+		c.Sprint(models.Todo.ToString()),
+		c.Sprint(models.InProgress.ToString()),
+		c.Sprint(models.Done.ToString()),
+	})
 
 	for i := range maxNumberOfRows {
 		todoTaskName := ""

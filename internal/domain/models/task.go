@@ -8,12 +8,14 @@ import (
 
 type TaskStatus int
 
+// TODO: unit test, make sure the order never changes
 const (
 	Todo TaskStatus = iota
 	InProgress
 	Done
 )
 
+// TODO: needs unit testing
 func (status TaskStatus) ToString() string {
 	switch status {
 	case Todo:
@@ -27,6 +29,7 @@ func (status TaskStatus) ToString() string {
 	}
 }
 
+// TODO: needs unit testing
 func TaskStatusStrToStatus(s string) (TaskStatus, error) {
 	name := strings.ToLower(s)
 
