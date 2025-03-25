@@ -65,11 +65,11 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 ## Roadmap
 Features coming up 
 - [x] Create/Update/Delete/List tasks
+- [x] Assign task to Project
 - [ ] REPL Support
 - [ ] Tags Support
 - [ ] Priorities Support
 - [ ] Task due date support
-- [ ] Project/Context for each task
 
 
 Started from this project: https://roadmap.sh/projects/task-tracker

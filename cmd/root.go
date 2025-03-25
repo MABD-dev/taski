@@ -36,6 +36,7 @@ func init() {
 	rootCmd.AddCommand(AddCmd)
 	AddCmd.PersistentFlags().StringP("status", "s", "todo", "Add status to task. options[\"todo\", \"inprogress\", \"done\"]")
 	AddCmd.PersistentFlags().StringP("description", "d", "", "Add description to task")
+	AddCmd.PersistentFlags().StringP("project", "p", "", "Define which project this task belongs to")
 
 	rootCmd.AddCommand(UpdateCmd)
 

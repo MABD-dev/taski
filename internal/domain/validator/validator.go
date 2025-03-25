@@ -21,6 +21,9 @@ func Task(task models.Task) error {
 	if err := TaskStatus(task.Status); err != nil {
 		return err
 	}
+	if err := TaskProject(task.Project); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -49,5 +52,14 @@ func TaskStatus(value models.TaskStatus) error {
 	if value != models.Todo && value != models.InProgress && value != models.Done {
 		return errors.New("invalid status")
 	}
+	return nil
+}
+
+func TaskProject(value string) error {
+	projectLen := utf8.RuneCountInString(value)
+	if projectLen > 50 {
+		return errors.New("project must be less than 50 characters")
+	}
+
 	return nil
 }

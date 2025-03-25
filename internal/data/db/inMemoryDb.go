@@ -17,7 +17,12 @@ func (db *InMemoryDb) GetAll() []models.Task {
 	return *db.Tasks
 }
 
-func (db *InMemoryDb) Add(name string, description string, status models.TaskStatus) error {
+func (db *InMemoryDb) Add(
+	name string,
+	description string,
+	status models.TaskStatus,
+	project string,
+) error {
 
 	maxTaxNumber := 0
 	for _, task := range *db.Tasks {
@@ -30,6 +35,7 @@ func (db *InMemoryDb) Add(name string, description string, status models.TaskSta
 		Name:        name,
 		Description: description,
 		Status:      status,
+		Project:     project,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   nil,
 	}

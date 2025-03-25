@@ -27,9 +27,14 @@ var AddCmd = &cobra.Command{
 			panic(err)
 		}
 
+		project, err := cmd.Flags().GetString("project")
+		if err != nil {
+			panic(err)
+		}
+
 		name := args[0]
 
-		err = repos.TasksRepo.Add(name, description, status)
+		err = repos.TasksRepo.Add(name, description, status, project)
 		if err != nil {
 			return err
 		}

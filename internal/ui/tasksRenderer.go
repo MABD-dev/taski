@@ -95,9 +95,16 @@ func formatTaskForKanbanBoard(task models.Task) string {
 	sb.WriteString(strconv.Itoa(task.Number))
 	sb.WriteString(". ")
 	sb.WriteString(task.Name)
+
 	if utf8.RuneCountInString(task.Description) > 0 {
 		sb.WriteString("\n - ")
 		sb.WriteString(task.Description)
+	}
+
+	if utf8.RuneCountInString(task.Project) > 0 {
+		sb.WriteString("\n")
+		c := color.New(color.FgHiCyan)
+		sb.WriteString(c.Sprintf("@%v", task.Project))
 	}
 	return sb.String()
 }
