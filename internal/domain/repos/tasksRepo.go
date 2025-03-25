@@ -2,6 +2,7 @@ package repos
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/mabd-dev/taski/internal/data/db"
 	"github.com/mabd-dev/taski/internal/domain/converter"
@@ -54,14 +55,18 @@ func (repo *TasksRepoStruct) Add(
 	status models.TaskStatus,
 	project string,
 ) error {
-	if err := validator.TaskName(name); err != nil {
+	trimmedName := strings.TrimSpace(name)
+	trimmedDescription := strings.TrimSpace(description)
+	trimmedProject := strings.TrimSpace(project)
+
+	if err := validator.TaskName(trimmedName); err != nil {
 		return err
 	}
 
-	if err := validator.TaskDescription(description); err != nil {
+	if err := validator.TaskDescription(trimmedDescription); err != nil {
 		return err
 	}
-	return repo.db.Add(name, description, status, project)
+	return repo.db.Add(trimmedName, trimmedDescription, status, trimmedProject)
 }
 
 func (repo *TasksRepoStruct) Update(taskNumber int, task models.Task) error {

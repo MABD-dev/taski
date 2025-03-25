@@ -58,15 +58,19 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 4. **Bulk set project name to tasks**
     ```sh
     taski project "prject name" 1 2 3 4
-    ```
+    # format: taski project "<project name>" <taskNumber>...
     ```
 
-5. **Delete Task**
+5. **Bulk set status to tasks**
     ```sh
-    taski delete <task number>
+    taski status "todo" 1 2 3 4
+    # format: taski status "<status>" <taskNumber>...
+    ```
 
-    # or delete multiple tasks together
-    taski delete <task number 1> <task number 2> <task number 3>
+6. **Delete Task**
+    ```sh
+    taski delete 1 2 3 10
+    # format: taski delete <tasknumber>...
     ```
 
 ## Roadmap

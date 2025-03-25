@@ -10,6 +10,9 @@ import (
 	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
+// Task, check if task number, name, description, status and project name are valid data
+//
+// also see @TaskName, @TaskDescription, @TaskStatus and @TaskProject
 func Task(task models.Task) error {
 	if task.Number <= 0 {
 		return fmt.Errorf("Invalid task number %v\n", task.Number)
@@ -30,6 +33,8 @@ func Task(task models.Task) error {
 	return nil
 }
 
+// TaskName, checks if name does not exceed max allowed number of characters and not blank, also
+// removing whitespace
 func TaskName(value string) error {
 	nameLen := utf8.RuneCountInString(strings.TrimSpace(value))
 	if nameLen <= 0 {
@@ -41,6 +46,8 @@ func TaskName(value string) error {
 	return nil
 }
 
+// TaskDescription, checks if description does not exceed max allowed number of characters and not blank, also
+// removing whitespace
 func TaskDescription(value string) error {
 	descriptionLen := utf8.RuneCountInString(strings.TrimSpace(value))
 
@@ -51,6 +58,8 @@ func TaskDescription(value string) error {
 	return nil
 }
 
+// TaskStatus, checks if status is valid number. One of the @models.TaskStatus options
+// removing whitespace
 func TaskStatus(value models.TaskStatus) error {
 	if value != models.Todo && value != models.InProgress && value != models.Done {
 		return errors.New("invalid status")
@@ -58,6 +67,8 @@ func TaskStatus(value models.TaskStatus) error {
 	return nil
 }
 
+// TaskProject, checks if project name does not exceed max allowed number of characters and not blank, also
+// removing whitespace
 func TaskProject(value string) error {
 	projectLen := utf8.RuneCountInString(strings.TrimSpace(value))
 
