@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -98,14 +99,39 @@ func TasksToRawData(tasks []models.Task) [][]string {
 }
 
 func RenderTask(task models.Task) {
-	fmt.Printf("┌%v\n", strings.Repeat("─", 50))
+	var sb strings.Builder
 
-	fmt.Printf("%v\n", taskNumberTitleFgColor.Sprintf("No. %v", task.Number))
-	fmt.Printf("%v %v\n", taskNameTitleFgColor.Sprint("Name:"), task.Name)
-	fmt.Printf("\n%v %v\n", taskDescriptionTitleFgColor.Sprint("Description:"), task.Description)
-	fmt.Printf("%v\n", formatTaskProject(task.Project))
+	// header
+	sb.WriteString("╭")
+	sb.WriteString(strings.Repeat("─", 50))
+	sb.WriteString("\n")
 
-	fmt.Printf("└%v\n", strings.Repeat("─", 50))
+	// task number
+	sb.WriteString(taskNumberTitleFgColor.Sprintf("No. %v", task.Number))
+	sb.WriteString("\n")
+
+	// task name
+	sb.WriteString(taskNameTitleFgColor.Sprint("Name: "))
+	sb.WriteString(task.Name)
+	sb.WriteString("\n")
+
+	// task description
+	sb.WriteString(taskDescriptionTitleFgColor.Sprint("Description: "))
+	sb.WriteString(task.Description)
+	sb.WriteString("\n")
+
+	// task project
+	sb.WriteString(formatTaskProject(task.Project))
+
+	s := sb.String()
+	re := regexp.MustCompile("\n")
+
+	output := re.ReplaceAllStringFunc(s, func(match string) string {
+		return match + "│"
+	})
+	fmt.Println(output)
+
+	fmt.Printf("╰%v\n", strings.Repeat("─", 50))
 }
 
 func formatTaskForKanbanBoard(task models.Task) string {
