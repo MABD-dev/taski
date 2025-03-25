@@ -30,17 +30,20 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.AddCommand(ListCmd)
+	rootCmd.AddCommand(
+		ListCmd,
+		AddCmd,
+		UpdateCmd,
+		DeleteCmd,
+		BulkUpdateTasksProject,
+		BulkUpdateTasksStatus,
+	)
+
+	// List cmd
 	ListCmd.PersistentFlags().StringArrayP("search", "s", []string{}, "Search task name/description by keyword(s)")
 
-	rootCmd.AddCommand(AddCmd)
+	// Add cmd
 	AddCmd.PersistentFlags().StringP("status", "s", "todo", "Add status to task. options[\"todo\", \"inprogress\", \"done\"]")
 	AddCmd.PersistentFlags().StringP("description", "d", "", "Add description to task")
 	AddCmd.PersistentFlags().StringP("project", "p", "", "Define which project this task belongs to")
-
-	rootCmd.AddCommand(UpdateCmd)
-
-	rootCmd.AddCommand(DeleteCmd)
-
-	rootCmd.AddCommand(BulkUpdateTasksProject)
 }
