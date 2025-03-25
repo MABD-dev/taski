@@ -1,7 +1,9 @@
 package ui
 
 import (
+	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -10,6 +12,13 @@ import (
 	"github.com/aquasecurity/table"
 	"github.com/fatih/color"
 	"github.com/mabd-dev/taski/internal/domain/models"
+)
+
+var (
+	taskNumberTitleFgColor      = color.New(color.FgHiBlue)
+	taskNameTitleFgColor        = color.New(color.FgHiGreen)
+	taskDescriptionTitleFgColor = color.New(color.FgHiGreen)
+	taskProjFgColor             = color.New(color.FgHiCyan)
 )
 
 func RenderTable(tasks []models.Task) {
@@ -89,6 +98,42 @@ func TasksToRawData(tasks []models.Task) [][]string {
 	return output
 }
 
+func RenderTask(task models.Task) {
+	var sb strings.Builder
+
+	// header
+	sb.WriteString("╭")
+	sb.WriteString(strings.Repeat("─", 50))
+	sb.WriteString("\n")
+
+	// task number
+	sb.WriteString(taskNumberTitleFgColor.Sprintf("No. %v", task.Number))
+	sb.WriteString("\n")
+
+	// task name
+	sb.WriteString(taskNameTitleFgColor.Sprint("Name: "))
+	sb.WriteString(task.Name)
+	sb.WriteString("\n")
+
+	// task description
+	sb.WriteString(taskDescriptionTitleFgColor.Sprint("Description: "))
+	sb.WriteString(task.Description)
+	sb.WriteString("\n")
+
+	// task project
+	sb.WriteString(formatTaskProject(task.Project))
+
+	s := sb.String()
+	re := regexp.MustCompile("\n")
+
+	output := re.ReplaceAllStringFunc(s, func(match string) string {
+		return match + "│"
+	})
+	fmt.Println(output)
+
+	fmt.Printf("╰%v\n", strings.Repeat("─", 50))
+}
+
 func formatTaskForKanbanBoard(task models.Task) string {
 	var sb strings.Builder
 
@@ -103,10 +148,16 @@ func formatTaskForKanbanBoard(task models.Task) string {
 
 	if utf8.RuneCountInString(task.Project) > 0 {
 		sb.WriteString("\n")
-		c := color.New(color.FgHiCyan)
-		sb.WriteString(c.Sprintf("@%v", task.Project))
+		sb.WriteString(formatTaskProject(task.Project))
 	}
 	return sb.String()
+}
+
+func formatTaskProject(value string) string {
+	if utf8.RuneCountInString(value) > 0 {
+		return taskProjFgColor.Sprintf("@%v", value)
+	}
+	return value
 }
 
 func formatDatetime(datetime time.Time) string {

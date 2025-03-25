@@ -35,6 +35,7 @@ func init() {
 		AddCmd,
 		UpdateCmd,
 		DeleteCmd,
+		ViewTaskCmd,
 		BulkUpdateTasksProject,
 		BulkUpdateTasksStatus,
 	)

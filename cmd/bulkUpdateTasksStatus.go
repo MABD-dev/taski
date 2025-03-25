@@ -12,7 +12,7 @@ import (
 )
 
 var BulkUpdateTasksStatus = &cobra.Command{
-	Use:   "status",
+	Use:   "status [task stats] [taskNumber]...",
 	Short: "Bulk update status to multiple tasks ",
 	Long: `Given new status, set that value to all provided task numbers
 > taski status <new name> <task number 1> <task number 2> ...
