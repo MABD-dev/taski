@@ -98,6 +98,13 @@ func TasksToRawData(tasks []models.Task) [][]string {
 	return output
 }
 
+// RenderTask takes a task and diplay detailed data about the task
+//
+// Data displayed:
+//   - task number
+//   - task name
+//   - task description
+//   - task project: nicely formatted using @formatTaskProject
 func RenderTask(task models.Task) {
 	var sb strings.Builder
 
@@ -131,19 +138,28 @@ func RenderTask(task models.Task) {
 	})
 	fmt.Println(output)
 
+	// footer
 	fmt.Printf("╰%v\n", strings.Repeat("─", 50))
 }
 
+// formatTaskForKanbanBoard takes a task and format it's data to be displayed in
+// kanban board
+//
+// Data displayed:
+//   - task number
+//   - task name: chunked into size of ~ 30 words see @chunkString
+//   - task description: show '...' if description is not blank to tell user that their is a description
+//   - task project name: colored and formatted nicely using @formatTaskProject
 func formatTaskForKanbanBoard(task models.Task) string {
 	var sb strings.Builder
 
 	sb.WriteString(strconv.Itoa(task.Number))
 	sb.WriteString(". ")
-	sb.WriteString(task.Name)
+
+	sb.WriteString(chunkString(task.Name, 30))
 
 	if utf8.RuneCountInString(task.Description) > 0 {
-		sb.WriteString("\n - ")
-		sb.WriteString(task.Description)
+		sb.WriteString("\n...")
 	}
 
 	if utf8.RuneCountInString(task.Project) > 0 {
@@ -153,13 +169,19 @@ func formatTaskForKanbanBoard(task models.Task) string {
 	return sb.String()
 }
 
+// formatTaskProject takes task project name and add coloring to it, if it's not blank text
+//
+// Returns:
+//
+//	A string with color and styling for task project name
 func formatTaskProject(value string) string {
-	if utf8.RuneCountInString(value) > 0 {
+	if utf8.RuneCountInString(strings.TrimSpace(value)) > 0 {
 		return taskProjFgColor.Sprintf("@%v", value)
 	}
 	return value
 }
 
+// formatDatetime takes datetime and format in a nice way to be printed on the screen
 func formatDatetime(datetime time.Time) string {
 	switch {
 	case isToday(datetime):
@@ -171,6 +193,45 @@ func formatDatetime(datetime time.Time) string {
 	default:
 		return datetime.Format(time.RFC1123)
 	}
+}
+
+// chunkSize takes a string and a chunk size, and it spluts the strings into n words
+// (splitted by whitespace) it then concat words until their rune count is greater than
+// or equal to chunkSize.
+//
+// Parameters:
+//
+//	s: The input string to be chunked.
+//	chunkSize: The maximum rune count for each line.
+//
+// Returns:
+//
+//	A string containing the input string chunked into lines, with newlines inserted.
+//
+// Example:
+//
+//	input := "This is a long string that needs to be chunked into lines."
+//	chunked := chunkString(input, 20)
+//	// chunked will be:
+//	// "This is a long string\nthat needs to be\nchunked into lines."
+func chunkString(s string, chunkSize int) string {
+	var sb strings.Builder
+
+	chunks := strings.Split(s, " ")
+	counter := 0
+
+	for i, chunk := range chunks {
+		counter += utf8.RuneCountInString(chunk)
+		sb.WriteString(chunk)
+		sb.WriteString(" ")
+
+		if counter >= chunkSize && i != len(chunks)-1 {
+			sb.WriteString("\n")
+			counter = 0
+		}
+	}
+
+	return sb.String()
 }
 
 func isToday(t time.Time) bool {
