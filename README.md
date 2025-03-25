@@ -3,7 +3,7 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 
 
 ## Features
-- Add, Update, and Delete Tasks
+- Add, Update, View and Delete Tasks
 - List Tasks: show tasks in kanban style table.
   - search tasks based on keyword(s) and highlight in kanban table/board
 - Bulk set project name to multiple tasks
@@ -36,42 +36,50 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 
 
 ## Usage
-1. **Listing Tasks**
+- **Listing Tasks**
     ```sh
     taski list # get list of all tasks 
     taski list -s "bug" # show all tasks and highlight 'bug' keyword
     ```
-2. **Add Task**
+- **Add Task**
     ```sh
     taski add "update taski readme file" # this will create new task with name "update taski reamde file"
     taski add "task name" -d "this is task description" # add task description message
     taski add "task name" -s inprogress # set task status 
     ```
 
-3. **Update Task**
+- **Update Task**
     ```sh
     taski update <task number> 
     ```
     This will open preferred editor in your terminal (default to vi) to be able to edit task data.
     Close editor to save new changes
 
-4. **Bulk set project name to tasks**
+- **View Task details**
+    ```sh
+    taski view 10
+    # format: taski view <tasknumber>...
+    ```
+
+ - **Bulk set project name to tasks**
     ```sh
     taski project "prject name" 1 2 3 4
     # format: taski project "<project name>" <taskNumber>...
     ```
 
-5. **Bulk set status to tasks**
+- **Bulk set status to tasks**
     ```sh
     taski status "todo" 1 2 3 4
     # format: taski status "<status>" <taskNumber>...
     ```
 
-6. **Delete Task**
+
+- **Delete Task**
     ```sh
     taski delete 1 2 3 10
     # format: taski delete <tasknumber>...
     ```
+
 
 ## Roadmap
 Features coming up 
