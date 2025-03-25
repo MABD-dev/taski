@@ -3,8 +3,10 @@ package validator
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"unicode/utf8"
 
+	"github.com/mabd-dev/taski/internal/domain/config"
 	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
@@ -29,20 +31,21 @@ func Task(task models.Task) error {
 }
 
 func TaskName(value string) error {
-	nameLen := utf8.RuneCountInString(value)
-	if nameLen == 0 {
-		return errors.New("name cannot be empty")
+	nameLen := utf8.RuneCountInString(strings.TrimSpace(value))
+	if nameLen <= 0 {
+		return errors.New("Task name must not be empty")
 	}
-	if nameLen > 50 {
-		return errors.New("name must be less than 50 characters")
+	if nameLen > config.TaskNameMaxLen {
+		return fmt.Errorf("Task name must be smaller than %v characters", config.TaskNameMaxLen+1)
 	}
 	return nil
 }
 
 func TaskDescription(value string) error {
-	descriptionLen := utf8.RuneCountInString(value)
-	if descriptionLen > 200 {
-		return errors.New("description must be less than 200 characters")
+	descriptionLen := utf8.RuneCountInString(strings.TrimSpace(value))
+
+	if descriptionLen > config.TaskDescriptionMaxLen {
+		return fmt.Errorf("Task description must be smaller than %v characters", config.TaskDescriptionMaxLen+1)
 	}
 
 	return nil
@@ -56,9 +59,10 @@ func TaskStatus(value models.TaskStatus) error {
 }
 
 func TaskProject(value string) error {
-	projectLen := utf8.RuneCountInString(value)
-	if projectLen > 50 {
-		return errors.New("project must be less than 50 characters")
+	projectLen := utf8.RuneCountInString(strings.TrimSpace(value))
+
+	if projectLen > config.TaskProjectMaxLen {
+		return fmt.Errorf("Task project must be smaller than %v characters", config.TaskProjectMaxLen+1)
 	}
 
 	return nil
