@@ -11,6 +11,7 @@ type taskToInsertData struct {
 	name        string
 	description string
 	status      models.TaskStatus
+	project     string
 }
 
 func TestInMemoryDb_Add(t *testing.T) {
@@ -29,6 +30,16 @@ func TestInMemoryDb_Add(t *testing.T) {
 				status:      models.Todo,
 			},
 		},
+		{
+			name:             "Add one task with project",
+			expectedTasksLen: 1,
+			taskToInsert: taskToInsertData{
+				name:        "a",
+				description: "description",
+				status:      models.Todo,
+				project:     "taski",
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -36,7 +47,12 @@ func TestInMemoryDb_Add(t *testing.T) {
 			db := db.InMemoryDb{
 				Tasks: &[]models.Task{},
 			}
-			err := db.Add(tt.taskToInsert.name, tt.taskToInsert.description, tt.taskToInsert.status)
+			err := db.Add(
+				tt.taskToInsert.name,
+				tt.taskToInsert.description,
+				tt.taskToInsert.status,
+				tt.taskToInsert.project,
+			)
 			if err != nil {
 				if !tt.wantErr {
 					t.Fatalf("Expected error=%v", err)
@@ -60,6 +76,14 @@ func TestInMemoryDb_Add(t *testing.T) {
 
 			if fetchedTask.Description != tt.taskToInsert.description {
 				t.Errorf("Expected task description %v found %v", tt.taskToInsert.description, fetchedTask.Description)
+			}
+
+			if fetchedTask.Status != tt.taskToInsert.status {
+				t.Errorf("Expected task status %v found %v", tt.taskToInsert.status, fetchedTask.Status)
+			}
+
+			if fetchedTask.Project != tt.taskToInsert.project {
+				t.Errorf("Expected task project %v found %v", tt.taskToInsert.project, fetchedTask.Project)
 			}
 		})
 	}

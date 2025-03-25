@@ -48,7 +48,12 @@ func (repo *TasksRepoStruct) ListWithFilters(statusFilters []string) []models.Ta
 	return tasks
 }
 
-func (repo *TasksRepoStruct) Add(name string, description string, status models.TaskStatus) error {
+func (repo *TasksRepoStruct) Add(
+	name string,
+	description string,
+	status models.TaskStatus,
+	project string,
+) error {
 	if err := validator.TaskName(name); err != nil {
 		return err
 	}
@@ -56,7 +61,7 @@ func (repo *TasksRepoStruct) Add(name string, description string, status models.
 	if err := validator.TaskDescription(description); err != nil {
 		return err
 	}
-	return repo.db.Add(name, description, status)
+	return repo.db.Add(name, description, status, project)
 }
 
 func (repo *TasksRepoStruct) Update(taskNumber int, task models.Task) error {

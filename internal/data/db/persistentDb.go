@@ -26,8 +26,13 @@ func (db *PersistentDb) GetAll() []models.Task {
 	return db.InMemoryDb.GetAll()
 }
 
-func (db *PersistentDb) Add(name string, description string, status models.TaskStatus) error {
-	err := db.InMemoryDb.Add(name, description, status)
+func (db *PersistentDb) Add(
+	name string,
+	description string,
+	status models.TaskStatus,
+	project string,
+) error {
+	err := db.InMemoryDb.Add(name, description, status, project)
 	if err != nil {
 		return err
 	}
