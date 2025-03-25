@@ -10,7 +10,6 @@ import (
 var AddCmd = &cobra.Command{
 	Use:   "add [task name] [task description]",
 	Short: "Add new task",
-	Long:  "Add new task to the list with default completion value to false",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		statusStr, err := cmd.Flags().GetString("status")

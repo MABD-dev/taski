@@ -41,4 +41,6 @@ func init() {
 	rootCmd.AddCommand(UpdateCmd)
 
 	rootCmd.AddCommand(DeleteCmd)
+
+	rootCmd.AddCommand(BulkUpdateTasksProject)
 }

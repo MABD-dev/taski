@@ -6,6 +6,7 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 - Add, Update, and Delete Tasks
 - List Tasks: show tasks in kanban style table.
   - search tasks based on keyword(s) and highlight in kanban table/board
+- Bulk set project name to multiple tasks
 - Data is saved locally on your machine in a json file
 
 
@@ -54,7 +55,13 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
     This will open preferred editor in your terminal (default to vi) to be able to edit task data.
     Close editor to save new changes
 
-4. **Delete Task**
+4. **Bulk set project name to tasks**
+    ```sh
+    taski project "prject name" 1 2 3 4
+    ```
+    ```
+
+5. **Delete Task**
     ```sh
     taski delete <task number>
 
