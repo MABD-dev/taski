@@ -13,10 +13,13 @@ type InMemoryDb struct {
 	Tasks *[]models.Task
 }
 
+// GetAll return all tasks saved in memory
 func (db *InMemoryDb) GetAll() []models.Task {
 	return *db.Tasks
 }
 
+// Add takes task details and add it to inMemory tasks slice. New task number will
+// be current max taskNumber + 1
 func (db *InMemoryDb) Add(
 	name string,
 	description string,
@@ -44,6 +47,11 @@ func (db *InMemoryDb) Add(
 	return nil
 }
 
+// Get searches for a task with @taskNumber
+//
+// @Returns:
+//
+//	task if found or nil
 func (db *InMemoryDb) Get(taskNumber int) *models.Task {
 	for _, t := range *db.Tasks {
 		if t.Number == taskNumber {
@@ -53,6 +61,14 @@ func (db *InMemoryDb) Get(taskNumber int) *models.Task {
 	return nil
 }
 
+// Update takes new task data and task number (ignoring that new task already has a
+// task taskNumber)
+// Searches for a task with @taskNumber if found it will be updated with new @task
+// else return error
+//
+// @Returns:
+//
+//	update task and return nil. error if task not found based on @taskNumber
 func (db *InMemoryDb) Update(taskNumber int, task models.Task) error {
 	taskIndex := db.getTaskIndexFromNumber(taskNumber)
 	if taskIndex == -1 {
@@ -65,6 +81,12 @@ func (db *InMemoryDb) Update(taskNumber int, task models.Task) error {
 	return nil
 }
 
+// Deelete taks list of taskNumbers and delete them.
+//
+// @Returns:
+//
+//	If any of the tasks for found  (base on it's taskNumber) will trow an error,
+//	else update data and return nil
 func (db *InMemoryDb) Delete(taskNumbers ...int) error {
 	for _, taskNumber := range taskNumbers {
 		taskIndex := db.getTaskIndexFromNumber(taskNumber)
@@ -78,6 +100,11 @@ func (db *InMemoryDb) Delete(taskNumbers ...int) error {
 	return nil
 }
 
+// getTaskIndexFromNumber searches @db for existing task with given number
+//
+// @Returns:
+//
+//	task index if found of -1 if not found
 func (db *InMemoryDb) getTaskIndexFromNumber(number int) int {
 	t := *db.Tasks
 	for i := range *db.Tasks {
