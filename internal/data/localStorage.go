@@ -11,10 +11,12 @@ type LocalStorage[T any] struct {
 }
 
 // Save given data to file
+//
 // @Returns:
 //
 //	error if
-//	    -
+//	    - Getting file path failed
+//	    - marchal data failed
 func (s *LocalStorage[T]) Save(data T) error {
 	filePath, err := getOrCreateFilePath(s.FileName)
 	if err != nil {

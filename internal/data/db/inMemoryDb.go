@@ -14,6 +14,9 @@ type InMemoryDb struct {
 }
 
 // GetAll return all tasks saved in memory
+// @Returns
+//
+//	all saved tasks in memory db
 func (db *InMemoryDb) GetAll() []models.Task {
 	return *db.Tasks
 }
