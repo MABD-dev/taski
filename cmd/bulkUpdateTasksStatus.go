@@ -12,12 +12,11 @@ import (
 )
 
 var BulkUpdateTasksStatus = &cobra.Command{
-	Use:   "status [task stats] [taskNumber]...",
+	Use:   "status <status> <taskNumber>...",
 	Short: "Bulk update status to multiple tasks ",
 	Long: `Given new status, set that value to all provided task numbers
-> taski status <new name> <task number 1> <task number 2> ...
 
-    Operation starts after checking that all task numbers are valid.
+Operation starts after checking that all task numbers are valid.
 `,
 	Args: cobra.MinimumNArgs(1), //arg is new project name
 	RunE: func(cmd *cobra.Command, args []string) error {

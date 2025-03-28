@@ -12,12 +12,10 @@ import (
 )
 
 var BulkUpdateTasksProject = &cobra.Command{
-	Use:   "project",
+	Use:   "project <name> <task number>...",
 	Short: "Bulk update project name to multiple tasks ",
 	Long: `Given new project name, set that value to all provided task numbers
-> taski project <new name> <task number 1> <task number 2> ...
-
-    Operation starts after checking that all task numbers are valid
+Operation starts after checking that all task numbers are valid
 `,
 	Args: cobra.MinimumNArgs(1), //arg is new project name
 	RunE: func(cmd *cobra.Command, args []string) error {

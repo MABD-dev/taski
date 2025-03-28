@@ -10,7 +10,7 @@ import (
 )
 
 var ViewTaskCmd = &cobra.Command{
-	Use:   "view [taskNumber]",
+	Use:   "view <taskNumber>",
 	Short: "View task details",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {

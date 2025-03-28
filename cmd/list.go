@@ -7,7 +7,7 @@ import (
 )
 
 var ListCmd = &cobra.Command{
-	Use:   "list",
+	Use:   "list [-s searchTerm]...",
 	Short: "List all tasks",
 	Long:  "List all your tasks",
 	Args:  cobra.NoArgs,

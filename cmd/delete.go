@@ -9,12 +9,9 @@ import (
 )
 
 var DeleteCmd = &cobra.Command{
-	Use:   "delete [task number]",
+	Use:   "delete <task number>...",
 	Short: "Delete a task",
-	Long: `delete a task given it's number or list of numbers like:
-$ ./tasks delete 1 2 3 4 5
-`,
-	Args: cobra.MinimumNArgs(1),
+	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		taskNumbers := []int{}

@@ -14,7 +14,7 @@ import (
 )
 
 var UpdateCmd = &cobra.Command{
-	Use:   "update",
+	Use:   "update <taskNumber>",
 	Short: "Update task name or description",
 	Long:  "Update a task name or description by providing it's number",
 	Args:  cobra.ExactArgs(1),
