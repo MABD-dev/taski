@@ -21,6 +21,8 @@ var (
 	taskProjFgColor             = color.New(color.FgHiCyan)
 )
 
+// RenderTable represent @tasks in a table with columns:
+//   - TaskNumber, Name, Descrirption, Status, Creation Date
 func RenderTable(tasks []models.Task) {
 	table := table.New(os.Stdout)
 	table.SetHeaders("#", "Name", "Description", "Status", "Creation Date")
@@ -32,11 +34,14 @@ func RenderTable(tasks []models.Task) {
 	table.Render()
 }
 
+// RenderKanbanBoard takes @tasks, convert them to raw data using @TasksToKanbanRawData
+// then draw them in a kanban style table
 func RenderKanbanBoard(tasks []models.Task) {
-	rawData := TasksToRawData(tasks)
+	rawData := TasksToKanbanRawData(tasks)
 	RenderRawData(rawData)
 }
 
+// RenderRawData take @data as 2d slice (rows and columns) and render them as a table
 func RenderRawData(data [][]string) {
 	table := table.New(os.Stdout)
 
@@ -50,7 +55,11 @@ func RenderRawData(data [][]string) {
 	table.Render()
 }
 
-func TasksToRawData(tasks []models.Task) [][]string {
+// TasksToKanbanRawData takes @tasks and convert them to 2d slice with columns:
+//   - Todo, InProgress, Done
+//
+// Use @formatTaskForKanbanBoard to convert a taskt to string representation on kanban board
+func TasksToKanbanRawData(tasks []models.Task) [][]string {
 	output := [][]string{}
 
 	taskToStatusMap := map[models.TaskStatus][]models.Task{}
@@ -234,17 +243,20 @@ func chunkString(s string, chunkSize int) string {
 	return sb.String()
 }
 
+// isToday checks if @t is today
 func isToday(t time.Time) bool {
 	now := time.Now()
 	return now.Year() == t.Year() && now.Month() == t.Month() && now.Day() == t.Day()
 }
 
+// isYesterday checks if @t is yesterday
 func isYesterday(t time.Time) bool {
 	now := time.Now()
 	yesterday := now.AddDate(0, 0, -1)
 	return yesterday.Year() == t.Year() && yesterday.Month() == t.Month() && yesterday.Day() == t.Day()
 }
 
+// isTomorrow checks if @t is tomorrow
 func isTomorrow(t time.Time) bool {
 	now := time.Now()
 	tomorrow := now.AddDate(0, 0, 1)
