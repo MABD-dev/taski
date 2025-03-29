@@ -84,7 +84,7 @@ func (db *InMemoryDb) Update(taskNumber int, task models.Task) error {
 	return nil
 }
 
-// Deelete taks list of taskNumbers and delete them.
+// Delete taks list of taskNumbers and delete them.
 //
 // @Returns:
 //
