@@ -6,6 +6,8 @@ import (
 	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
+// StringArrayToTaskStatus convert strs to slice of @models.TaskStatus
+// if any str failed, return error
 func StringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
 	statuses := []models.TaskStatus{}
 	for _, statusStr := range strs {
@@ -18,6 +20,8 @@ func StringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
 	return statuses, nil
 }
 
+// FilterByStatus takes @tasks slice and @statuses slice, then filter
+// tasks which has status in statuses slice
 func FilterByStatus(tasks []models.Task, statuses []models.TaskStatus) []models.Task {
 	filteredTasks := []models.Task{}
 

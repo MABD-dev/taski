@@ -8,7 +8,7 @@ import (
 
 var ListCmd = &cobra.Command{
 	Use:   "list [-s searchTerm]...",
-	Short: "List all tasks",
+	Short: "List all tasks with optional search terms",
 	Long:  "List all your tasks",
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -19,7 +19,7 @@ var ListCmd = &cobra.Command{
 
 		tasks := repos.TasksRepo.GetAll()
 
-		rawData := ui.TasksToRawData(tasks)
+		rawData := ui.TasksToKanbanRawData(tasks)
 		ui.HighlightTerms(&rawData, searchTerm)
 		ui.RenderRawData(rawData)
 
