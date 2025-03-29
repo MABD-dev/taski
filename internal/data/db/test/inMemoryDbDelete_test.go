@@ -16,7 +16,6 @@ func TestInMemoryDb_Delete(t *testing.T) {
 		wantErr       bool
 		tasksToInsert []models.Task
 	}{
-		// TODO: Add test cases.
 		{
 			name:        "delete nothing",
 			taskNumbers: []int{},
