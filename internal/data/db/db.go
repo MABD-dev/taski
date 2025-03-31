@@ -10,7 +10,13 @@ type Db interface {
 	// Assuming data is valid. (Should be done in domain layer)
 	// @Returns:
 	//     error if, actually, no case it would return nil. But it's good for later
-	Add(name string, description string, status models.TaskStatus, project string) error
+	Add(
+		name string,
+		description string,
+		status models.TaskStatus,
+		project string,
+		tags []string,
+	) error
 
 	// Get task by it's number
 	//

@@ -20,6 +20,7 @@ var (
 	taskNameTitleFgColor        = color.New(color.FgHiGreen)
 	taskDescriptionTitleFgColor = color.New(color.FgHiGreen)
 	taskProjFgColor             = color.New(color.FgHiCyan)
+	taskTagFgColor              = color.New(color.FgHiBlue)
 )
 
 // ClearTerminal runs 'clear' command on the terminal
@@ -184,11 +185,24 @@ func formatTaskForKanbanBoard(task models.Task) string {
 		sb.WriteString("\n...")
 	}
 
+	sb.WriteString("\n")
+
 	if utf8.RuneCountInString(task.Project) > 0 {
-		sb.WriteString("\n")
 		sb.WriteString(formatTaskProject(task.Project))
 	}
-	return sb.String()
+
+	if len(task.Tags) > 0 {
+		sb.WriteString(" ")
+		for i, tag := range task.Tags {
+			sb.WriteString(formatTaskTag(tag))
+			if i != len(task.Tags) {
+				sb.WriteString(" ")
+			}
+		}
+	}
+	sb.WriteString("\n")
+
+	return strings.TrimSpace(sb.String())
 }
 
 // formatTaskProject takes task project name and add coloring to it, if it's not blank text
@@ -201,6 +215,11 @@ func formatTaskProject(value string) string {
 		return taskProjFgColor.Sprintf("@%v", value)
 	}
 	return value
+}
+
+// formatTaskTag fromat and color task tag to be used in ui
+func formatTaskTag(value string) string {
+	return taskTagFgColor.Sprintf("#%v", value)
 }
 
 // formatDatetime takes datetime and format in a nice way to be printed on the screen

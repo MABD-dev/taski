@@ -56,6 +56,7 @@ type Task struct {
 	Description string
 	Status      TaskStatus
 	Project     string
+	Tags        []string
 	CreatedAt   time.Time
 	UpdatedAt   *time.Time
 }

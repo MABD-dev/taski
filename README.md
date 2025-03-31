@@ -43,9 +43,11 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
     ```
 - **Add Task**
     ```sh
-    taski add "update taski readme file" # this will create new task with name "update taski reamde file"
-    taski add "task name" -d "this is task description" # add task description message
-    taski add "task name" -s inprogress # set task status 
+    taski add "Upload files" # this will create new task with name "update taski reamde file"
+    taski add "Upload files" -d "this is task description" # add task description message
+    taski add "Upload files" -s inprogress # set task status 
+    taski add "Upload files" -p chatgpty # assign this task to 'chatgpty' project
+    taski add "Upload files" -t web # add a tag to this task, to add/edit/delete tags check `update` command
     ```
 
 - **Update Task**
@@ -84,9 +86,9 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
 ## Roadmap
 Features coming up 
 - [x] Create/Update/Delete/List tasks
-- [x] Assign task to Project
+- [x] Assign Task to Project
+- [x] Support Task Tags
 - [ ] REPL Support
-- [ ] Tags Support
 - [ ] Priorities Support
 - [ ] Task due date support
 
