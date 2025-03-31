@@ -152,8 +152,17 @@ func RenderTask(task models.Task) {
 
 	// task project
 	sb.WriteString(formatTaskProject(task.Project))
+	sb.WriteString(" ")
 
-	s := sb.String()
+	// task tags
+	for i, tag := range task.Tags {
+		sb.WriteString(formatTaskTag(tag))
+		if i != len(task.Tags) {
+			sb.WriteString(" ")
+		}
+	}
+
+	s := strings.TrimSpace(sb.String())
 	re := regexp.MustCompile("\n")
 
 	output := re.ReplaceAllStringFunc(s, func(match string) string {

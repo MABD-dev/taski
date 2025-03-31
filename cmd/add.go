@@ -8,7 +8,7 @@ import (
 )
 
 var AddCmd = &cobra.Command{
-	Use:   "add <task name> [-f description] [-p project_name] [-s status]",
+	Use:   "add <task name> [-f description] [-p project_name] [-s status] [-t tag]",
 	Short: "Add new task",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
