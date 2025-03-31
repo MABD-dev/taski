@@ -48,6 +48,8 @@ A simple offline first, kanban styled, task manager for your terminal
     taski list # get list of all tasks 
     taski list -s "bug" # show all tasks and highlight 'bug' keyword
     ```
+<br/>
+
 - **Add Task**
     ```sh
     # create new task with name "update taski reamde file"
@@ -68,7 +70,6 @@ A simple offline first, kanban styled, task manager for your terminal
     ```
     You can mix and match these flags while creating new task
 <br/>
-<br/>
 
 - **Update Task**
     ```sh
@@ -76,7 +77,6 @@ A simple offline first, kanban styled, task manager for your terminal
     ```
     Opens preferred editor in your terminal (default to vi) to edit task data.
     Close editor to save new changes
-<br/>
 <br/>
 
 - **View Task details**
