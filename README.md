@@ -1,13 +1,20 @@
-# Taski 
-A simple task manager for the terminal. Manage your to-dos with ease, right from the terminal
+# Taski
+A simple offline first, kanban styled, task manager for your terminal
 
 
 ## Features
 - Add, Update, View and Delete Tasks
 - List Tasks: show tasks in kanban style table.
   - search tasks based on keyword(s) and highlight in kanban table/board
-- Bulk set project name to multiple tasks
 - Data is saved locally on your machine in a json file
+
+#### Task data
+    id
+    name
+    description (optional)
+    status (todo, inprogress, done)
+    tags (optional)
+    project (optional)
 
 
 ## Installation
@@ -43,38 +50,55 @@ A simple task manager for the terminal. Manage your to-dos with ease, right from
     ```
 - **Add Task**
     ```sh
-    taski add "Upload files" # this will create new task with name "update taski reamde file"
-    taski add "Upload files" -d "this is task description" # add task description message
-    taski add "Upload files" -s inprogress # set task status 
-    taski add "Upload files" -p chatgpty # assign this task to 'chatgpty' project
-    taski add "Upload files" -t web # add a tag to this task, to add/edit/delete tags check `update` command
+    # create new task with name "update taski reamde file"
+    taski add "Upload files" 
+
+    # add task description message
+    taski add "Upload files" -d "this is task description" 
+
+    # set task status 
+    taski add "Upload files" -s inprogress 
+
+    # assign this task to 'chatgpty' project
+    taski add "Upload files" -p chatgpty 
+
+    # add a tag to this task, 
+    # NOTE: to add/edit/delete tags check `update task` command
+    taski add "Upload files" -t web 
     ```
+    You can mix and match these flags while creating new task
+<br/>
+<br/>
 
 - **Update Task**
     ```sh
     taski update <task number> 
     ```
-    This will open preferred editor in your terminal (default to vi) to be able to edit task data.
+    Opens preferred editor in your terminal (default to vi) to edit task data.
     Close editor to save new changes
+<br/>
+<br/>
 
 - **View Task details**
     ```sh
     taski view 10
     # format: taski view <tasknumber>...
     ```
+<br/>
 
  - **Bulk set project name to tasks**
     ```sh
     taski project "prject name" 1 2 3 4
     # format: taski project "<project name>" <taskNumber>...
     ```
+<br/>
 
 - **Bulk set status to tasks**
     ```sh
     taski status "todo" 1 2 3 4
     # format: taski status "<status>" <taskNumber>...
     ```
-
+<br/>
 
 - **Delete Task**
     ```sh
