@@ -38,8 +38,9 @@ func (db *PersistentDb) Add(
 	description string,
 	status models.TaskStatus,
 	project string,
+	tags []string,
 ) error {
-	err := db.InMemoryDb.Add(name, description, status, project)
+	err := db.InMemoryDb.Add(name, description, status, project, tags)
 	if err != nil {
 		return err
 	}

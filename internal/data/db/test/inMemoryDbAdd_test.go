@@ -12,6 +12,7 @@ type taskToInsertData struct {
 	description string
 	status      models.TaskStatus
 	project     string
+	tags        []string
 }
 
 func TestInMemoryDb_Add(t *testing.T) {
@@ -52,6 +53,7 @@ func TestInMemoryDb_Add(t *testing.T) {
 				tt.taskToInsert.description,
 				tt.taskToInsert.status,
 				tt.taskToInsert.project,
+				tt.taskToInsert.tags,
 			)
 			if err != nil {
 				if !tt.wantErr {
