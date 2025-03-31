@@ -55,6 +55,7 @@ Operation starts after checking that all task numbers are valid
 			}
 		}
 
+		ui.ClearTerminal()
 		ui.RenderKanbanBoard(repos.TasksRepo.GetAll())
 
 		return nil

@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
@@ -20,6 +21,18 @@ var (
 	taskDescriptionTitleFgColor = color.New(color.FgHiGreen)
 	taskProjFgColor             = color.New(color.FgHiCyan)
 )
+
+// ClearTerminal runs 'clear' command on the terminal
+//
+// NOTE:
+//
+//	this is for linux only
+func ClearTerminal() {
+	// this is for linux only
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
 
 // RenderTable represent @tasks in a table with columns:
 //   - TaskNumber, Name, Descrirption, Status, Creation Date

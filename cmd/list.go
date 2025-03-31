@@ -19,6 +19,7 @@ var ListCmd = &cobra.Command{
 
 		tasks := repos.TasksRepo.GetAll()
 
+		ui.ClearTerminal()
 		rawData := ui.TasksToKanbanRawData(tasks)
 		ui.HighlightTerms(&rawData, searchTerm)
 		ui.RenderRawData(rawData)
