@@ -16,7 +16,7 @@ func HighlightTerms(input *[][]string, searchTerms []string) {
 	fgColor := color.New(color.FgBlack)
 	bkColor := color.New(color.BgYellow)
 
-	pattern := "(" + strings.Join(searchTerms, "|") + ")"
+	pattern := "(?i)(" + strings.Join(searchTerms, "|") + ")"
 	re := regexp.MustCompile(pattern)
 
 	for i := range *input {
