@@ -8,7 +8,7 @@ import (
 )
 
 var AddCmd = &cobra.Command{
-	Use:   "add <task name> [-f description] [-p project_name] [-s status]",
+	Use:   "add <task name> [-f description] [-p project_name] [-s status] [-t tag]",
 	Short: "Add new task",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -31,13 +31,16 @@ var AddCmd = &cobra.Command{
 			panic(err)
 		}
 
+		tags, err := cmd.Flags().GetStringArray("tag")
+
 		name := args[0]
 
-		err = repos.TasksRepo.Add(name, description, status, project)
+		err = repos.TasksRepo.Add(name, description, status, project, tags)
 		if err != nil {
 			return err
 		}
 
+		ui.ClearTerminal()
 		ui.RenderKanbanBoard(repos.TasksRepo.GetAll())
 		return nil
 	},

@@ -28,6 +28,7 @@ func (db *InMemoryDb) Add(
 	description string,
 	status models.TaskStatus,
 	project string,
+	tags []string,
 ) error {
 
 	maxTaxNumber := 0
@@ -42,6 +43,7 @@ func (db *InMemoryDb) Add(
 		Description: description,
 		Status:      status,
 		Project:     project,
+		Tags:        tags,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   nil,
 	}

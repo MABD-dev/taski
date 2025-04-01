@@ -3,6 +3,7 @@ package repos
 import (
 	"errors"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/mabd-dev/taski/internal/data/db"
 	"github.com/mabd-dev/taski/internal/domain/converter"
@@ -75,6 +76,7 @@ func (repo *TasksRepoStruct) Add(
 	description string,
 	status models.TaskStatus,
 	project string,
+	tags []string,
 ) error {
 	trimmedName := strings.TrimSpace(name)
 	trimmedDescription := strings.TrimSpace(description)
@@ -87,7 +89,17 @@ func (repo *TasksRepoStruct) Add(
 	if err := validator.TaskDescription(trimmedDescription); err != nil {
 		return err
 	}
-	return repo.db.Add(trimmedName, trimmedDescription, status, trimmedProject)
+
+	// Only add tags that length > 0 chars
+	validatedTags := []string{}
+	for _, tag := range tags {
+		trimmedTag := strings.TrimSpace(tag)
+		if utf8.RuneCountInString(trimmedTag) > 0 {
+			validatedTags = append(validatedTags, trimmedTag)
+		}
+	}
+
+	return repo.db.Add(trimmedName, trimmedDescription, status, trimmedProject, validatedTags)
 }
 
 // Update takes new task data and task number (ignoring that new task already has a
