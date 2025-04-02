@@ -1,6 +1,7 @@
 package repos
 
 import (
+	"errors"
 	"strings"
 	"testing"
 	"time"
@@ -108,7 +109,93 @@ func TestGetTasks_With(t *testing.T) {
 
 // ******************************************
 // ******************************************
-// ************ Update Testing **************
+// *********** Add Task Testing *************
+// ******************************************
+// ******************************************
+
+func TestAddTask_ValidationIsWorking(t *testing.T) {
+	taskToInsert := models.Task{
+		Number:      1,
+		Name:        "Something",
+		Description: "some description",
+		Status:      models.Done,
+		Project:     "Something",
+		Tags:        []string{},
+		CreatedAt:   time.Now(),
+	}
+
+	tests := []struct {
+		name          string
+		tasksToInsert models.Task
+		validator     validator.Validator
+		wantErr       bool
+	}{
+		{
+			name:          "Test: Task name validator is working",
+			tasksToInsert: taskToInsert,
+			validator: validator.MockValidator{
+				NameResult: errors.New("testing name validator"),
+			},
+			wantErr: true,
+		},
+		{
+			name:          "Test: Task description validator is working",
+			tasksToInsert: taskToInsert,
+			validator: validator.MockValidator{
+				DecriptionResult: errors.New("testing description validator"),
+			},
+			wantErr: true,
+		},
+		{
+			name:          "Test: Task status validator is working",
+			tasksToInsert: taskToInsert,
+			validator: validator.MockValidator{
+				StatusResult: errors.New("testing status validator"),
+			},
+			wantErr: true,
+		},
+		{
+			name:          "Test: Task project validator is working",
+			tasksToInsert: taskToInsert,
+			validator: validator.MockValidator{
+				ProjectResult: errors.New("testing project validator"),
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			tasks := []models.Task{}
+			db := db.InMemoryDb{
+				Tasks: &tasks,
+			}
+			repo := CreateTasksRepo(&db, tt.validator)
+
+			task := tt.tasksToInsert
+			err := repo.Add(task.Name, task.Description, task.Status, task.Project, task.Tags)
+
+			if err == nil && tt.wantErr {
+				t.Fatal("Expected error found nil")
+			} else if err != nil && !tt.wantErr {
+				t.Fatalf("Expected nil found error=%v", err)
+			}
+
+			fetchedTasks := repo.GetAll()
+			expectedTasksLen := 1
+			if tt.wantErr {
+				expectedTasksLen = 0
+			}
+			if len(fetchedTasks) != expectedTasksLen {
+				t.Fatalf("Expected %v task in db found %v", expectedTasksLen, len(fetchedTasks))
+			}
+		})
+	}
+}
+
+// ******************************************
+// ******************************************
+// ********** Update Task Testing ***********
 // ******************************************
 // ******************************************
 

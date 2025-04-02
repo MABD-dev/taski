@@ -88,7 +88,15 @@ func (repo *TasksRepoStruct) Add(
 		return err
 	}
 
+	if err := repo.validator.TaskStatus(status); err != nil {
+		return err
+	}
+
 	if err := repo.validator.TaskDescription(trimmedDescription); err != nil {
+		return err
+	}
+
+	if err := repo.validator.TaskProject(trimmedProject); err != nil {
 		return err
 	}
 
