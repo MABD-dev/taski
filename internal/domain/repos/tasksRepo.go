@@ -71,8 +71,6 @@ func (repo *TasksRepoStruct) ListWithFilters(statusFilters []string) []models.Ta
 //   - description: task description, trim spaces and validate it
 //   - status: task status
 //   - project
-//
-// TODO: need unit testing. Project name is not validated
 func (repo *TasksRepoStruct) Add(
 	name string,
 	description string,

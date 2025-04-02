@@ -193,6 +193,120 @@ func TestAddTask_ValidationIsWorking(t *testing.T) {
 	}
 }
 
+func TestAddTask_NameWhiteSpaceIsRemoved(t *testing.T) {
+	tests := []struct {
+		name         string
+		taskToInsert models.Task
+		expectedTask models.Task
+		wantErr      bool
+	}{
+		{
+			name: "Task name whitespace is removed",
+			taskToInsert: models.Task{
+				Number: 1,
+				Name:   " a ",
+			},
+			expectedTask: models.Task{
+				Number: 1,
+				Name:   "a",
+			},
+		},
+		{
+			name: "Task description whitespace is removed",
+			taskToInsert: models.Task{
+				Number:      1,
+				Name:        "a",
+				Description: " b ",
+			},
+			expectedTask: models.Task{
+				Number:      1,
+				Name:        "a",
+				Description: "b",
+			},
+		},
+		{
+			name: "Task project whitespace is removed",
+			taskToInsert: models.Task{
+				Number:  1,
+				Name:    "a",
+				Project: " b ",
+			},
+			expectedTask: models.Task{
+				Number:  1,
+				Name:    "a",
+				Project: "b",
+			},
+		},
+		{
+			name: "Task tags whitespace is removed",
+			taskToInsert: models.Task{
+				Number: 1,
+				Name:   "a",
+				Tags:   []string{" a", "b ", "   c   "},
+			},
+			expectedTask: models.Task{
+				Number: 1,
+				Name:   "a",
+				Tags:   []string{"a", "b", "c"},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := createRepoNoData()
+
+			task := tt.taskToInsert
+			err := repo.Add(task.Name, task.Description, task.Status, task.Project, task.Tags)
+
+			if err == nil && tt.wantErr {
+				t.Fatal("Expected error found nil")
+			} else if err != nil && !tt.wantErr {
+				t.Fatalf("Expected nil found error=%v", err)
+			}
+
+			allTasks := repo.GetAll()
+			expectedTasksLen := 1
+			if tt.wantErr {
+				expectedTasksLen = 0
+			}
+			if len(allTasks) != expectedTasksLen {
+				t.Fatalf("Expected %v task in db found %v", expectedTasksLen, len(allTasks))
+			}
+
+			fetchedTask := allTasks[0]
+			if fetchedTask.Number != tt.expectedTask.Number {
+				t.Errorf("Expected task number %v found %v", tt.expectedTask.Number, fetchedTask.Number)
+			}
+
+			if fetchedTask.Name != tt.expectedTask.Name {
+				t.Errorf("Expected task name %v found %v", tt.expectedTask.Name, fetchedTask.Name)
+			}
+
+			if fetchedTask.Description != tt.expectedTask.Description {
+				t.Errorf("Expected task description %v found %v", tt.expectedTask.Description, fetchedTask.Description)
+			}
+
+			if fetchedTask.Status != tt.expectedTask.Status {
+				t.Errorf("Expected task status %v found %v", tt.expectedTask.Status, fetchedTask.Status)
+			}
+
+			if fetchedTask.Project != tt.expectedTask.Project {
+				t.Errorf("Expected task project %v found %v", tt.expectedTask.Project, fetchedTask.Project)
+			}
+
+			if len(fetchedTask.Tags) != len(tt.expectedTask.Tags) {
+				t.Errorf("Expected task tags size %v found %v", len(tt.expectedTask.Tags), (fetchedTask.Tags))
+			}
+
+			for i := range fetchedTask.Tags {
+				if fetchedTask.Tags[i] != tt.expectedTask.Tags[i] {
+					t.Errorf("Expected task tag[%v] %v found %v", i, len(tt.expectedTask.Tags), (fetchedTask.Tags))
+				}
+			}
+		})
+	}
+}
+
 // ******************************************
 // ******************************************
 // ********** Update Task Testing ***********
