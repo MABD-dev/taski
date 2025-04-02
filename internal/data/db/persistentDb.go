@@ -74,12 +74,17 @@ func (db *PersistentDb) Update(taskNumber int, task models.Task) error {
 	return nil
 }
 
-// Deelete taks list of taskNumbers and delete them.
+// Delete all all with matching numbers.
+// If any of the task numbers is invalid, error will be returned and nothing
+// would be deleted
+//
+// @Example:
+//
+//	if taskNumbers = [1, 2, 3] and 2 is invalid(does not exist) 1 and 3 won't be deleted
 //
 // @Returns:
 //
-//	If any of the tasks for found  (base on it's taskNumber) will trow an error,
-//	else update data and return nil
+//	error if any of task numbers is invalid
 func (db *PersistentDb) Delete(taskNumbers ...int) error {
 	err := db.InMemoryDb.Delete(taskNumbers...)
 	if err != nil {

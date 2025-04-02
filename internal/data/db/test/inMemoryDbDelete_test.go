@@ -10,27 +10,25 @@ import (
 
 func TestInMemoryDb_Delete(t *testing.T) {
 	tests := []struct {
-		name string // description of this test case
-		// Named input parameters for target function.
-		taskNumbers   []int
-		wantErr       bool
-		tasksToInsert []models.Task
+		name                string
+		taskNumbersToDelete []int
+		wantErr             bool
+		tasksToInsert       []models.Task
 	}{
-		// TODO: Add test cases.
 		{
-			name:        "delete nothing",
-			taskNumbers: []int{},
-			wantErr:     false,
+			name:                "delete nothing",
+			taskNumbersToDelete: []int{},
+			wantErr:             false,
 		},
 		{
-			name:        "Delete unexisting task",
-			taskNumbers: []int{1},
-			wantErr:     true,
+			name:                "Delete unexisting task",
+			taskNumbersToDelete: []int{1},
+			wantErr:             true,
 		},
 		{
-			name:        "Delete 1 task",
-			taskNumbers: []int{1},
-			wantErr:     false,
+			name:                "Delete 1 task",
+			taskNumbersToDelete: []int{1},
+			wantErr:             false,
 			tasksToInsert: []models.Task{
 				{
 					Number:      1,
@@ -43,9 +41,9 @@ func TestInMemoryDb_Delete(t *testing.T) {
 			},
 		},
 		{
-			name:        "Delete multiple tasks",
-			taskNumbers: []int{1, 2},
-			wantErr:     false,
+			name:                "Delete multiple tasks",
+			taskNumbersToDelete: []int{1, 2},
+			wantErr:             false,
 			tasksToInsert: []models.Task{
 				{
 					Number:      1,
@@ -71,7 +69,7 @@ func TestInMemoryDb_Delete(t *testing.T) {
 			db := db.InMemoryDb{
 				Tasks: &tt.tasksToInsert,
 			}
-			gotErr := db.Delete(tt.taskNumbers...)
+			gotErr := db.Delete(tt.taskNumbersToDelete...)
 			if gotErr != nil {
 				if !tt.wantErr {
 					t.Errorf("Delete() failed: %v", gotErr)
@@ -87,5 +85,40 @@ func TestInMemoryDb_Delete(t *testing.T) {
 				t.Fatalf("Expected number of task 0 found %v", len(allTasks))
 			}
 		})
+	}
+}
+
+func TestDeleteMultipleTasksWithSomeInvalid(t *testing.T) {
+	tasks := []models.Task{
+		{
+			Number:      1,
+			Name:        "a",
+			Description: "d",
+			Status:      models.Todo,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   nil,
+		},
+		{
+			Number:      2,
+			Name:        "a",
+			Description: "d",
+			Status:      models.Todo,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   nil,
+		},
+	}
+	oldTasksLen := len(tasks)
+
+	db := db.InMemoryDb{
+		Tasks: &tasks,
+	}
+	err := db.Delete(1, 3, 2)
+	if err == nil {
+		t.Fatal("Expected error found nil")
+	}
+
+	tasksInDb := db.GetAll()
+	if len(tasksInDb) != oldTasksLen {
+		t.Fatalf("Expected %v tasks in db found %v", oldTasksLen, len(tasksInDb))
 	}
 }

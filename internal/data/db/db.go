@@ -34,8 +34,11 @@ type Db interface {
 	Update(taskNumber int, task models.Task) error
 
 	// Delete all all with matching numbers.
-	// Each taskNumber will be avaluated alone, when invalid number is found, function
-	// will stop and return an error
+	// If any of the task numbers is invalid, error will be returned and nothing
+	// would be deleted
+	//
+	// @Example:
+	//   if taskNumbers = [1, 2, 3] and 2 is invalid(does not exist) 1 and 3 won't be deleted
 	//
 	// @Returns:
 	//     error if any of task numbers is invalid

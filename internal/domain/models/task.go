@@ -8,15 +8,13 @@ import (
 
 type TaskStatus int
 
-// TODO: unit test, make sure the order never changes
 const (
 	Todo TaskStatus = iota
 	InProgress
 	Done
 )
 
-// TODO: needs unit testing
-// ToString, convert @TaskStatus to string
+// ToString, convert @TaskStatus to string to be displayed on ui
 func (status TaskStatus) ToString() string {
 	switch status {
 	case Todo:
@@ -30,11 +28,10 @@ func (status TaskStatus) ToString() string {
 	}
 }
 
-// TODO: needs unit testing
 // TaskStatusStrToStatus, takes a string, change it to lower case then try
 // to convert it to @TaskStatus if possible, else return error
 func TaskStatusStrToStatus(s string) (TaskStatus, error) {
-	name := strings.ToLower(s)
+	name := strings.ToLower(strings.TrimSpace(s))
 
 	if name == "todo" {
 		return Todo, nil

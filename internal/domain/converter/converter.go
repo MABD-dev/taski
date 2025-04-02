@@ -13,7 +13,7 @@ func StringArrayToTaskStatus(strs []string) ([]models.TaskStatus, error) {
 	for _, statusStr := range strs {
 		status, err := models.TaskStatusStrToStatus(statusStr)
 		if err != nil {
-			return statuses, err
+			return []models.TaskStatus{}, err
 		}
 		statuses = append(statuses, status)
 	}
