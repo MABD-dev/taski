@@ -74,6 +74,10 @@ func (db *InMemoryDb) Get(taskNumber int) *models.Task {
 // @Returns:
 //
 //	update task and return nil. error if task not found based on @taskNumber
+//
+// TODO: should not be able to update task number
+//
+//	Add unit test for that
 func (db *InMemoryDb) Update(taskNumber int, task models.Task) error {
 	taskIndex := db.getTaskIndexFromNumber(taskNumber)
 	if taskIndex == -1 {
@@ -86,19 +90,38 @@ func (db *InMemoryDb) Update(taskNumber int, task models.Task) error {
 	return nil
 }
 
-// Delete taks list of taskNumbers and delete them.
+// Delete all all with matching numbers.
+// If any of the task numbers is invalid, error will be returned and nothing
+// would be deleted
+//
+// @Example:
+//
+//	if taskNumbers = [1, 2, 3] and 2 is invalid(does not exist) 1 and 3 won't be deleted
 //
 // @Returns:
 //
-//	If any of the tasks for found  (base on it's taskNumber) will trow an error,
-//	else update data and return nil
+//	error if any of task numbers is invalid
 func (db *InMemoryDb) Delete(taskNumbers ...int) error {
+
+	getInvalidTasks := func(taskNumbers ...int) []int {
+		invalidTaskNumbers := []int{}
+
+		for _, taskNumber := range taskNumbers {
+			taskIndex := db.getTaskIndexFromNumber(taskNumber)
+			if taskIndex == -1 {
+				invalidTaskNumbers = append(invalidTaskNumbers, taskNumber)
+			}
+		}
+		return invalidTaskNumbers
+	}
+
+	invalidTaskNumbers := getInvalidTasks(taskNumbers...)
+	if len(invalidTaskNumbers) > 0 {
+		return fmt.Errorf("Could not find these tasks=%v", invalidTaskNumbers)
+	}
+
 	for _, taskNumber := range taskNumbers {
 		taskIndex := db.getTaskIndexFromNumber(taskNumber)
-		if taskIndex == -1 {
-			return fmt.Errorf("Could not find task with number=%v", taskNumber)
-		}
-
 		*db.Tasks = slices.Delete(*db.Tasks, taskIndex, taskIndex+1)
 	}
 
