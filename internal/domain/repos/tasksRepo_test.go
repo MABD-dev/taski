@@ -13,17 +13,19 @@ import (
 
 func createRepoNoData() TasksRepoStruct {
 	tasks := make([]models.Task, 0)
+	validator := validator.ValidatorImpl{}
 	db := db.InMemoryDb{
 		Tasks: &tasks,
 	}
-	return CreateTasksRepo(&db)
+	return CreateTasksRepo(&db, validator)
 }
 
 func createRepo(tasks []models.Task) TasksRepoStruct {
+	validator := validator.ValidatorImpl{}
 	db := db.InMemoryDb{
 		Tasks: &tasks,
 	}
-	return CreateTasksRepo(&db)
+	return CreateTasksRepo(&db, validator)
 }
 
 // ******************************************
@@ -232,7 +234,7 @@ func TestUpdateValidationIsWorking(t *testing.T) {
 				t.Fatal("Expected task found il")
 			}
 
-			err = validator.Task(*fetchedTask)
+			err = validator.ValidatorImpl{}.Task(*fetchedTask)
 			if err != nil {
 				t.Fatalf("Expected task to be valid found otherwise, task=%v, err=%v", fetchedTask, err)
 			}

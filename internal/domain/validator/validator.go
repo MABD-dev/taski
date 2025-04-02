@@ -10,23 +10,33 @@ import (
 	"github.com/mabd-dev/taski/internal/domain/models"
 )
 
+type Validator interface {
+	Task(task models.Task) error
+	TaskName(value string) error
+	TaskDescription(value string) error
+	TaskStatus(value models.TaskStatus) error
+	TaskProject(value string) error
+}
+
+type ValidatorImpl struct{}
+
 // Task, check if task number, name, description, status and project name are valid data
 //
 // also see @TaskName, @TaskDescription, @TaskStatus and @TaskProject
-func Task(task models.Task) error {
+func (v ValidatorImpl) Task(task models.Task) error {
 	if task.Number <= 0 {
 		return fmt.Errorf("Invalid task number %v\n", task.Number)
 	}
-	if err := TaskName(task.Name); err != nil {
+	if err := v.TaskName(task.Name); err != nil {
 		return err
 	}
-	if err := TaskDescription(task.Description); err != nil {
+	if err := v.TaskDescription(task.Description); err != nil {
 		return err
 	}
-	if err := TaskStatus(task.Status); err != nil {
+	if err := v.TaskStatus(task.Status); err != nil {
 		return err
 	}
-	if err := TaskProject(task.Project); err != nil {
+	if err := v.TaskProject(task.Project); err != nil {
 		return err
 	}
 
@@ -35,7 +45,7 @@ func Task(task models.Task) error {
 
 // TaskName, checks if name does not exceed max allowed number of characters and not blank, also
 // removing whitespace
-func TaskName(value string) error {
+func (v ValidatorImpl) TaskName(value string) error {
 	nameLen := utf8.RuneCountInString(strings.TrimSpace(value))
 	if nameLen <= 0 {
 		return errors.New("Task name must not be empty")
@@ -48,7 +58,7 @@ func TaskName(value string) error {
 
 // TaskDescription, checks if description does not exceed max allowed number of characters and not blank, also
 // removing whitespace
-func TaskDescription(value string) error {
+func (v ValidatorImpl) TaskDescription(value string) error {
 	descriptionLen := utf8.RuneCountInString(strings.TrimSpace(value))
 
 	if descriptionLen > config.TaskDescriptionMaxLen {
@@ -60,7 +70,7 @@ func TaskDescription(value string) error {
 
 // TaskStatus, checks if status is valid number. One of the @models.TaskStatus options
 // removing whitespace
-func TaskStatus(value models.TaskStatus) error {
+func (v ValidatorImpl) TaskStatus(value models.TaskStatus) error {
 	if value != models.Todo && value != models.InProgress && value != models.Done {
 		return errors.New("invalid status")
 	}
@@ -69,7 +79,7 @@ func TaskStatus(value models.TaskStatus) error {
 
 // TaskProject, checks if project name does not exceed max allowed number of characters and not blank, also
 // removing whitespace
-func TaskProject(value string) error {
+func (v ValidatorImpl) TaskProject(value string) error {
 	projectLen := utf8.RuneCountInString(strings.TrimSpace(value))
 
 	if projectLen > config.TaskProjectMaxLen {

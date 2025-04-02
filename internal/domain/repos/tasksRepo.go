@@ -16,16 +16,18 @@ var (
 )
 
 type TasksRepoStruct struct {
-	db db.Db
+	db        db.Db
+	validator validator.Validator
 }
 
 var (
 	TasksRepo TasksRepoStruct
 )
 
-func CreateTasksRepo(db db.Db) TasksRepoStruct {
+func CreateTasksRepo(db db.Db, validator validator.Validator) TasksRepoStruct {
 	TasksRepo = TasksRepoStruct{
-		db: db,
+		db:        db,
+		validator: validator,
 	}
 	return TasksRepo
 }
@@ -82,11 +84,11 @@ func (repo *TasksRepoStruct) Add(
 	trimmedDescription := strings.TrimSpace(description)
 	trimmedProject := strings.TrimSpace(project)
 
-	if err := validator.TaskName(trimmedName); err != nil {
+	if err := repo.validator.TaskName(trimmedName); err != nil {
 		return err
 	}
 
-	if err := validator.TaskDescription(trimmedDescription); err != nil {
+	if err := repo.validator.TaskDescription(trimmedDescription); err != nil {
 		return err
 	}
 
@@ -118,7 +120,7 @@ func (repo *TasksRepoStruct) Update(taskNumber int, task models.Task) error {
 		return InvalidTaskNumber
 	}
 
-	if err := validator.Task(task); err != nil {
+	if err := repo.validator.Task(task); err != nil {
 		return err
 	}
 

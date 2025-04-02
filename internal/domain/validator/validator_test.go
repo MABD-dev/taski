@@ -9,6 +9,7 @@ import (
 )
 
 func TestValidator_Name(t *testing.T) {
+	validator := ValidatorImpl{}
 	tests := []struct {
 		name     string
 		taskName string
@@ -43,7 +44,7 @@ func TestValidator_Name(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := TaskName(tt.taskName)
+			err := validator.TaskName(tt.taskName)
 			if err == nil && tt.wantErr {
 				t.Fatal("Expected error found nil")
 			} else if err != nil && !tt.wantErr {
@@ -55,6 +56,7 @@ func TestValidator_Name(t *testing.T) {
 }
 
 func TestValidator_Description(t *testing.T) {
+	validator := ValidatorImpl{}
 	tests := []struct {
 		name        string
 		description string
@@ -84,7 +86,7 @@ func TestValidator_Description(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := TaskDescription(tt.description)
+			err := validator.TaskDescription(tt.description)
 			if err == nil && tt.wantErr {
 				t.Fatal("Expected error found nil")
 			} else if err != nil && !tt.wantErr {
@@ -96,6 +98,7 @@ func TestValidator_Description(t *testing.T) {
 }
 
 func TestValidator_TaskStatus(t *testing.T) {
+	validator := ValidatorImpl{}
 	tests := []struct {
 		name       string
 		taskStatus models.TaskStatus
@@ -130,7 +133,7 @@ func TestValidator_TaskStatus(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := TaskStatus(tt.taskStatus)
+			err := validator.TaskStatus(tt.taskStatus)
 			if err == nil && tt.wantErr {
 				t.Fatal("Expected error found nil")
 			} else if err != nil && !tt.wantErr {
@@ -142,6 +145,7 @@ func TestValidator_TaskStatus(t *testing.T) {
 }
 
 func TestValidator_Project(t *testing.T) {
+	validator := ValidatorImpl{}
 	tests := []struct {
 		name        string
 		projectName string
@@ -176,7 +180,7 @@ func TestValidator_Project(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := TaskProject(tt.projectName)
+			err := validator.TaskProject(tt.projectName)
 			if err == nil && tt.wantErr {
 				t.Fatal("Expected error found nil")
 			} else if err != nil && !tt.wantErr {
@@ -188,6 +192,7 @@ func TestValidator_Project(t *testing.T) {
 }
 
 func TestValidator_Task(t *testing.T) {
+	validator := ValidatorImpl{}
 	tests := []struct {
 		name    string
 		task    models.Task
@@ -265,7 +270,7 @@ func TestValidator_Task(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := Task(tt.task)
+			err := validator.Task(tt.task)
 			if err == nil && tt.wantErr {
 				t.Fatal("Expected error found nil")
 			} else if err != nil && !tt.wantErr {

@@ -9,6 +9,7 @@ import (
 	"github.com/mabd-dev/taski/internal/data/db"
 	"github.com/mabd-dev/taski/internal/domain/models"
 	"github.com/mabd-dev/taski/internal/domain/repos"
+	"github.com/mabd-dev/taski/internal/domain/validator"
 )
 
 func main() {
@@ -21,7 +22,8 @@ func main() {
 	}
 
 	persistentDb := db.NewPersistentDb(storage, &inMemoryDb)
-	repos.CreateTasksRepo(persistentDb)
+	validator := validator.ValidatorImpl{}
+	repos.CreateTasksRepo(persistentDb, validator)
 
 	cmd.Execute()
 }
