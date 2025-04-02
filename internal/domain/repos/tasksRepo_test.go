@@ -330,32 +330,56 @@ func TestUpdateUnexistingTask(t *testing.T) {
 	}
 }
 
+func TestUpdate_ValidatorIsWorking(t *testing.T) {
+	validatorError := errors.New("task validator is working")
+	validator := validator.MockValidator{
+		TaskResult: validatorError,
+	}
+	tasks := []models.Task{
+		{
+			Number: 1,
+			Name:   "Something",
+		},
+	}
+	db := db.InMemoryDb{
+		Tasks: &tasks,
+	}
+	repo := CreateTasksRepo(&db, validator)
+
+	err := repo.Update(1, models.Task{
+		Number: 1,
+		Name:   "Something else",
+	})
+	if err != validatorError {
+		t.Fatalf("Expected error=%v, found=%v", validatorError, err)
+	}
+}
+
 // TODO: to be added later when InMemoryDb is updated
-//
-// func TestUpdateTaskNumberHasNoEffect(t *testing.T) {
-// 	task := models.Task{
-// 		Number:      1,
-// 		Name:        "Something",
-// 		Description: "some description",
-// 		Status:      models.Done,
-// 		Project:     "Something",
-// 		Tags:        []string{},
-// 		CreatedAt:   time.Now(),
-// 	}
-// 	tasks := []models.Task{task}
-// 	repo := createRepo(tasks)
-//
-// 	err := repo.Update(1, task)
-// 	if err != nil {
-// 		t.Fatalf("Expected no error found error=%v", err)
-// 		return
-// 	}
-//
-// 	fetchedTask := repo.Get(1)
-// 	if fetchedTask == nil {
-// 		t.Fatal("Expected task found nil")
-// 	}
-// }
+
+func TestUpdateTaskNumberHasNoEffect(t *testing.T) {
+	tasks := []models.Task{
+		{
+			Number: 1,
+			Name:   "Something",
+		},
+	}
+	repo := createRepo(tasks)
+
+	err := repo.Update(1, models.Task{
+		Number: 2,
+		Name:   "Something",
+	})
+	if err != nil {
+		t.Fatalf("Expected no error found error=%v", err)
+		return
+	}
+
+	fetchedTask := repo.Get(1)
+	if fetchedTask == nil {
+		t.Fatal("Expected task found nil")
+	}
+}
 
 func TestUpdateValidationIsWorking(t *testing.T) {
 	existingTask := models.Task{

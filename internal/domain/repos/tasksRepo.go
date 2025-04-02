@@ -130,6 +130,8 @@ func (repo *TasksRepoStruct) Update(taskNumber int, task models.Task) error {
 		return err
 	}
 
+	task.Number = taskNumber
+
 	return repo.db.Update(taskNumber, task)
 }
 
